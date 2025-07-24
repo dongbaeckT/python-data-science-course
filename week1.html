@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파이썬 데이터 과학 수업 - Week 1</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8f4f0 0%, #f1ebe5 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #e8d5d3 0%, #d4c0b8 100%);
+            color: #5d4e75;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .student-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px dashed #dee2e6;
+        }
+
+        .section {
+            margin: 40px 0;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-thinking {
+            background: linear-gradient(135deg, #f7e6e6 0%, #f2d5d5 100%);
+        }
+
+        .section-practice {
+            background: linear-gradient(135deg, #e6f0f7 0%, #d5e5f2 100%);
+        }
+
+        .section-game {
+            background: linear-gradient(135deg, #f0e6f7 0%, #e5d5f2 100%);
+        }
+
+        .section-summary {
+            background: linear-gradient(135deg, #e6f7e6 0%, #d5f2d5 100%);
+        }
+
+        .section-homework {
+            background: linear-gradient(135deg, #f7f0e6 0%, #f2e5d5 100%);
+        }
+
+        .section-feedback {
+            background: linear-gradient(135deg, #ebbba7 0%, #cfc7f8 100%);
+        }
+
+        .section-preview {
+            background: linear-gradient(135deg, #f0f7e6 0%, #e5f2d5 100%);
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            color: #2c3e50;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+
+        .answer-box {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            min-height: 60px;
+        }
+
+        .code-block {
+            margin: 15px 0;
+        }
+
+        pre[class*="language-"] {
+            border-radius: 10px;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #27ae60;
+        }
+
+        .step h4 {
+            color: #27ae60;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .checkbox {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .checkbox input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .result-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .blank {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 150px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .rating {
+            display: flex;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .star {
+            font-size: 1.5em;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #ffd700;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 학생용 워크시트 - Week 1</h1>
+            <h2>데이터 과학이 뭘까? + NumPy 첫걸음</h2>
+            <div class="student-info">
+                <strong>이름:</strong> <span class="blank"></span> 
+                <strong>날짜:</strong> <span class="blank"></span>
+            </div>
+        </div>
+
+        <div class="section section-thinking">
+            <h2>🤔 수업 전 생각해보기</h2>
+            
+            <div class="question">
+                <h3>1. 데이터 과학이 뭐라고 생각하나요?</h3>
+                <div class="answer-box">
+                    <strong>💭 내 생각:</strong><br><br><br><br>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>2. 우리 주변에서 볼 수 있는 '데이터'에는 어떤 것들이 있을까요? (5개 이상 써보세요)</h3>
+                <ul>
+                    <li><strong>예시:</strong> 유튜브 조회수</li>
+                    <li>1) <span class="blank"></span></li>
+                    <li>2) <span class="blank"></span></li>
+                    <li>3) <span class="blank"></span></li>
+                    <li>4) <span class="blank"></span></li>
+                    <li>5) <span class="blank"></span></li>
+                    <li>6) <span class="blank"></span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section section-practice">
+            <h2>💻 실습 따라하기</h2>
+
+            <div class="step">
+                <h4>Step 1: NumPy 임포트하기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 코드를 직접 쳐보세요!
+import numpy as np
+print("NumPy 준비 완료!")</code></pre>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="check1">
+                    <label for="check1">✅ 체크: 에러 없이 실행되었나요?</label>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>Step 2: 내 시험 점수 분석하기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 최근 5번의 시험 점수를 입력해보세요 (실제 점수 또는 가상의 점수)
+my_scores = np.array([__, __, __, __, __])
+
+print(f"내 시험 점수들: {my_scores}")
+print(f"평균 점수: {np.mean(my_scores)}")
+print(f"최고 점수: {np.max(my_scores)}")
+print(f"최저 점수: {np.min(my_scores)}")</code></pre>
+                </div>
+                <div class="result-box">
+                    <strong>📊 내 결과:</strong><br>
+                    • 평균 점수: <span class="blank"></span>점<br>
+                    • 최고 점수: <span class="blank"></span>점<br>
+                    • 최저 점수: <span class="blank"></span>점
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>Step 3: 리스트 vs 배열 비교하기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 리스트로 계산
+list_data = [1, 2, 3, 4, 5]
+list_result = [x * 2 for x in list_data]
+print("리스트 결과:", list_result)
+
+# 배열로 계산  
+array_data = np.array([1, 2, 3, 4, 5])
+array_result = array_data * 2
+print("배열 결과:", array_result)</code></pre>
+                </div>
+                <div class="question">
+                    <strong>❓ 질문:</strong> 둘의 결과가 같나요? 어떤 방법이 더 간단해 보이나요?
+                    <div class="answer-box">
+                        <strong>💭 내 답:</strong><br><br><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-game">
+            <h2>🎮 숫자 마법사 게임</h2>
+            
+            <div class="question">
+                <strong>미션:</strong> 아래 배열에 마법을 걸어서 암호를 만들어보세요!
+                
+                <div class="code-block">
+                    <pre><code class="language-python">secret_message = np.array([8, 5, 12, 12, 15])
+
+# 각 숫자에 10을 더해보세요
+step1 = secret_message + ___
+
+# 그 결과에 2를 곱해보세요  
+step2 = step1 * ___
+
+print("암호:", step2)</code></pre>
+                </div>
+                
+                <div class="result-box">
+                    <strong>🔐 내가 만든 암호:</strong> 
+                    [ <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span> ]
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-summary">
+            <h2>🧠 오늘 배운 것 정리하기</h2>
+
+            <div class="question">
+                <h3>1. NumPy가 뭔가요?</h3>
+                <div class="answer-box">
+                    <strong>💭 내 설명:</strong><br><br><br>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>2. 배열(Array)과 리스트(List)의 차이점은?</h3>
+                <div class="answer-box">
+                    <strong>🚀 배열의 장점:</strong><br><br><br>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>3. 오늘 사용해본 NumPy 함수들 (3개 이상)</h3>
+                <ul>
+                    <li><code>np.array()</code> → 배열 만들기</li>
+                    <li><code>np.mean()</code> → 평균 구하기</li>
+                    <li><code>np.max()</code> → 최댓값 구하기</li>
+                    <li><span class="blank"></span> → <span class="blank"></span></li>
+                    <li><span class="blank"></span> → <span class="blank"></span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section section-homework">
+            <h2>🎯 도전! 과제</h2>
+            
+            <div class="question">
+                <strong>미션:</strong> 우리 가족의 나이를 배열로 만들어서 분석해보세요!
+                
+                <div class="code-block">
+                    <pre><code class="language-python">family_ages = np.array([엄마나이, 아빠나이, 내나이, ...])
+
+# 분석해볼 것들
+print(f"우리 가족 평균 나이: {np.mean(family_ages)}")
+print(f"나이 차이 (최대-최소): {np.max(family_ages) - np.min(family_ages)}")
+print(f"20세 이상 가족 수: {np.sum(family_ages >= 20)}")</code></pre>
+                </div>
+                
+                <div style="background: #f8f5f0; border: 2px solid #e6d4a3; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>📸 결과 스크린샷을 찍어서 선생님께 보여주세요!</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-preview">
+            <h2>🎯 다음 시간 예습</h2>
+            
+            <div style="background: white; padding: 20px; border-radius: 10px;">
+                <p>다음 시간에는 <strong>"배열로 놀아보기"</strong>를 배울 예정입니다!</p>
+                <ul>
+                    <li>2차원 배열 (표 형태)</li>
+                    <li>배열의 모양(shape)</li>
+                    <li>숫자로 간단한 그림 그리기</li>
+                </ul>
+                
+                <div style="background: #f0f5f0; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <strong>💡 궁금한 점:</strong> 숫자로 어떻게 그림을 그릴 수 있을까요? 생각해보고 오세요! 🤔
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 30px 0;">
+            <h2>👨‍🏫 선생님 확인란</h2>
+            
+            <div class="checkbox">
+                <input type="checkbox" id="complete">
+                <label for="complete">실습 완료</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="understand">
+                <label for="understand">개념 이해</label>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" id="homework">
+                <label for="homework">과제 확인</label>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <strong>📝 코멘트:</strong>
+                <div class="answer-box" style="min-height: 80px;"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>🎉 수고하셨습니다! 다음 시간에 만나요!</strong></p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                이 교재는 [학원명] 전용 교재입니다. 📚
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <script>
+        // 체크박스 상태 피드백
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    checkbox.parentElement.style.backgroundColor = '#e8f5e8';
+                } else {
+                    checkbox.parentElement.style.backgroundColor = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
