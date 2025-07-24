@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파이썬 데이터 과학 수업</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8f4f0 0%, #f1ebe5 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #e8d5d3 0%, #d4c0b8 100%);
+            color: #5d4e75;
+            padding: 50px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .course-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .info-card h3 {
+            color: #5d4e75;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+
+        .info-card p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .weeks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .week-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            border-left: 5px solid;
+        }
+
+        .week-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .week-card:nth-child(8n+1) { border-left-color: #ff6b6b; }
+        .week-card:nth-child(8n+2) { border-left-color: #4ecdc4; }
+        .week-card:nth-child(8n+3) { border-left-color: #45b7d1; }
+        .week-card:nth-child(8n+4) { border-left-color: #96ceb4; }
+        .week-card:nth-child(8n+5) { border-left-color: #feca57; }
+        .week-card:nth-child(8n+6) { border-left-color: #ff9ff3; }
+        .week-card:nth-child(8n+7) { border-left-color: #54a0ff; }
+        .week-card:nth-child(8n+8) { border-left-color: #5f27cd; }
+
+        .week-content {
+            padding: 20px;
+        }
+
+        .week-number {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .week-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .week-subtitle {
+            font-size: 0.95em;
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .week-button {
+            display: inline-block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #5d4e75 0%, #7a6b85 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .week-button:hover {
+            background: linear-gradient(135deg, #4a3d5f 0%, #6b5a75 100%);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .footer h3 {
+            color: #5d4e75;
+            margin-bottom: 15px;
+        }
+
+        .footer p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .weeks-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🐍 파이썬 데이터 과학 수업</h1>
+            <p>NumPy부터 인공지능까지, 데이터 과학의 모든 것을 함께 배워보아요!</p>
+        </div>
+
+        <div class="course-info">
+            <div class="info-card">
+                <h3>📚 전체 과정</h3>
+                <p>24주 완성 코스<br>주 1회, 90분 수업</p>
+            </div>
+            <div class="info-card">
+                <h3>🎯 학습 목표</h3>
+                <p>파이썬으로 데이터 분석<br>기초부터 AI까지</p>
+            </div>
+            <div class="info-card">
+                <h3>💻 준비물</h3>
+                <p>VSCode, Python<br>열정과 호기심!</p>
+            </div>
+        </div>
+
+        <div class="weeks-grid">
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 1</div>
+                    <div class="week-title">데이터 과학이 뭘까? + NumPy 첫걸음</div>
+                    <div class="week-subtitle">데이터 과학 소개, NumPy 기초</div>
+                    <a href="week1.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 2</div>
+                    <div class="week-title">배열로 놀아보기 - 숫자들의 마술</div>
+                    <div class="week-subtitle">2차원 배열, 인덱싱과 슬라이싱</div>
+                    <a href="week2.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 3</div>
+                    <div class="week-title">배열 연산의 신비한 세계</div>
+                    <div class="week-subtitle">브로드캐스팅, 수학 함수 활용</div>
+                    <a href="week3.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 4</div>
+                    <div class="week-title">실전 프로젝트: 우리 반 키와 몸무게 분석하기</div>
+                    <div class="week-subtitle">통계 분석, 상관관계 찾기</div>
+                    <a href="week4.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 5</div>
+                    <div class="week-title">그래프로 이야기하기 - Matplotlib 입문</div>
+                    <div class="week-subtitle">첫 그래프 그리기, 기본 설정</div>
+                    <a href="week5.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 6</div>
+                    <div class="week-title">다양한 그래프 그려보기</div>
+                    <div class="week-subtitle">선그래프, 막대그래프, 원그래프</div>
+                    <a href="week6.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 7</div>
+                    <div class="week-title">그래프를 예쁘게 꾸미기</div>
+                    <div class="week-subtitle">색상, 레이블, 스타일 변경</div>
+                    <a href="week7.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 8</div>
+                    <div class="week-title">실전 프로젝트: 우리 동네 날씨 데이터 시각화</div>
+                    <div class="week-subtitle">실제 데이터로 완성된 분석</div>
+                    <a href="week8.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 9</div>
+                    <div class="week-title">히스토그램과 산점도로 패턴 찾기</div>
+                    <div class="week-subtitle">분포 분석, 상관관계 시각화</div>
+                    <a href="week9.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 10</div>
+                    <div class="week-title">여러 그래프를 한번에 그리기</div>
+                    <div class="week-subtitle">서브플롯, 그리드 레이아웃</div>
+                    <a href="week10.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 11</div>
+                    <div class="week-title">인터랙티브 그래프 만들기</div>
+                    <div class="week-subtitle">Plotly로 움직이는 그래프</div>
+                    <a href="week11.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 12</div>
+                    <div class="week-title">실전 프로젝트: K-pop 음악 차트 분석</div>
+                    <div class="week-subtitle">트렌드 분석, 인기도 시각화</div>
+                    <a href="week12.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 13</div>
+                    <div class="week-title">캐글이 뭐지? 첫 데이터셋 다운로드</div>
+                    <div class="week-subtitle">캐글 사이트 탐방, 데이터셋 선택</div>
+                    <a href="week13.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 14</div>
+                    <div class="week-title">CSV 파일 읽기와 데이터 살펴보기</div>
+                    <div class="week-subtitle">Pandas 기초, 데이터 탐색</div>
+                    <a href="week14.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 15</div>
+                    <div class="week-title">데이터 정리하기</div>
+                    <div class="week-subtitle">결측값, 이상값 처리</div>
+                    <a href="week15.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 16</div>
+                    <div class="week-title">실전 프로젝트: 타이타닉 승객 데이터 분석</div>
+                    <div class="week-subtitle">생존율 분석, 패턴 발견</div>
+                    <a href="week16.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 17</div>
+                    <div class="week-title">인공지능, 머신러닝이 뭔가요?</div>
+                    <div class="week-subtitle">AI 개념, 머신러닝 종류</div>
+                    <a href="week17.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 18</div>
+                    <div class="week-title">분류와 예측 - 간단한 모델 만들기</div>
+                    <div class="week-subtitle">결정트리, 첫 예측 모델</div>
+                    <a href="week18.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 19</div>
+                    <div class="week-title">모델 성능 평가하기</div>
+                    <div class="week-subtitle">정확도, 혼동행렬 이해</div>
+                    <a href="week19.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 20</div>
+                    <div class="week-title">실전 프로젝트: 꽃 종류 분류기 만들기</div>
+                    <div class="week-subtitle">아이리스 데이터로 분류 모델</div>
+                    <a href="week20.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 21</div>
+                    <div class="week-title">딥러닝의 세계 엿보기</div>
+                    <div class="week-subtitle">신경망 개념, 딥러닝 소개</div>
+                    <a href="week21.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 22</div>
+                    <div class="week-title">이미지 인식 모델 체험하기</div>
+                    <div class="week-subtitle">CNN 기초, 이미지 분류</div>
+                    <a href="week22.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 23</div>
+                    <div class="week-title">나만의 분류기 만들기</div>
+                    <div class="week-subtitle">전이학습, 커스텀 모델</div>
+                    <a href="week23.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+
+            <div class="week-card">
+                <div class="week-content">
+                    <div class="week-number">Week 24</div>
+                    <div class="week-title">최종 프로젝트 발표회</div>
+                    <div class="week-subtitle">포트폴리오 완성, 발표</div>
+                    <a href="week24.html" class="week-button">워크시트 보기</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>📞 문의사항</h3>
+            <p><strong>학원명:</strong> [코딩앤플레이 용인동백]</p>
+            <p><strong>연락처:</strong> [010-3072-2253]</p>
+            <p style="margin-top: 20px; font-size: 0.9em; color: #999;">
+                © 2025 [학원명]. 이 교재는 학원 전용 교재입니다.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // 간단한 애니메이션 효과
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.week-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
+        });
+    </script>
+</body>
+</html>
