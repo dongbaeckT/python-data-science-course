@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 2 - 배열로 놀아보기</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8f4f0 0%, #f1ebe5 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #e8d5d3 0%, #d4c0b8 100%);
+            color: #5d4e75;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .student-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px dashed #dee2e6;
+        }
+
+        .section {
+            margin: 40px 0;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-review {
+            background: linear-gradient(135deg, #e6f0f7 0%, #d5e5f2 100%);
+        }
+
+        .section-practice {
+            background: linear-gradient(135deg, #f0e6f7 0%, #e5d5f2 100%);
+        }
+
+        .section-project {
+            background: linear-gradient(135deg, #f7f0e6 0%, #f2e5d5 100%);
+        }
+
+        .section-summary {
+            background: linear-gradient(135deg, #e6f7e6 0%, #d5f2d5 100%);
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            color: #2c3e50;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+
+        .quiz-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .answer-box {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            min-height: 60px;
+        }
+
+        .code-block {
+            margin: 15px 0;
+        }
+
+        pre[class*="language-"] {
+            border-radius: 10px;
+            font-size: 14px;
+            margin: 10px 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            position: relative;
+        }
+
+        pre[class*="language-"]:before {
+            content: "⚠️ 코드를 직접 타이핑해보세요!";
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background: #ff6b6b;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: sans-serif;
+        }
+
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #27ae60;
+        }
+
+        .step h4 {
+            color: #27ae60;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .result-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .result-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .result-list li {
+            margin: 8px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #4caf50;
+        }
+
+        .blank {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 80px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .blank-long {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 200px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .pattern-box {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #5d4e75 0%, #7a6b85 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #4a3d5f 0%, #6b5a75 100%);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+
+            .quiz-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← 목차로 돌아가기</a>
+        
+        <div class="header">
+            <h1>📝 Week 2 워크시트</h1>
+            <h2>배열로 놀아보기 - 숫자들의 마술</h2>
+            <div class="student-info">
+                <strong>이름:</strong> <span class="blank"></span> 
+                <strong>날짜:</strong> <span class="blank"></span>
+            </div>
+        </div>
+
+        <div class="section section-review">
+            <h2>🤔 복습 퀴즈</h2>
+            
+            <div class="question">
+                <h3>1. 지난 시간에 배운 NumPy는 뭐였죠?</h3>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="checkbox" name="q1" value="game">
+                        게임 이름
+                    </label>
+                    <label class="quiz-option">
+                        <input type="checkbox" name="q1" value="tool">
+                        숫자 계산 도구
+                    </label>
+                    <label class="quiz-option">
+                        <input type="checkbox" name="q1" value="graph">
+                        그래프 그리는 프로그램
+                    </label>
+                    <label class="quiz-option">
+                        <input type="checkbox" name="q1" value="website">
+                        웹사이트
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>2. np.mean()은 무엇을 계산하나요?</h3>
+                <div class="answer-box">
+                    <strong>답:</strong> <span class="blank-long"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-practice">
+            <h2>💻 오늘의 실습</h2>
+
+            <div class="step">
+                <h4>Step 1: 다양한 배열 만들기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python">import numpy as np
+
+# 0으로 채운 배열 (5개)
+zeros_array = np.zeros(___)
+print("0 배열:", zeros_array)
+
+# 1로 채운 배열 (7개)  
+ones_array = np.ones(___)
+print("1 배열:", ones_array)
+
+# 1부터 10까지 배열
+range_array = np.arange(1, ___)
+print("순서 배열:", range_array)
+
+# 랜덤 숫자 배열 (1-100 사이 숫자 5개)
+random_array = np.random.randint(1, 101, ___)
+print("랜덤 배열:", random_array)</code></pre>
+                </div>
+                
+                <div class="result-box">
+                    <strong>📊 내 결과:</strong>
+                    <ul class="result-list">
+                        <li><strong>0 배열:</strong> [ <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span> ]</li>
+                        <li><strong>1 배열:</strong> [ <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span> ]</li>
+                        <li><strong>순서 배열:</strong> [ <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span> ]</li>
+                        <li><strong>랜덤 배열:</strong> [ <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span>, <span class="blank"></span> ]</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>Step 2: 2차원 배열 체험하기 (표 만들기)</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 우리 반 3명의 성적표 (국어, 영어, 수학)
+grade_table = np.array([
+    [85, 92, 78],    # 첫 번째 학생
+    [90, 88, 95],    # 두 번째 학생  
+    [76, 82, 89]     # 세 번째 학생
+])
+
+print("성적표:")
+print(grade_table)
+print(f"표의 모양: {grade_table.shape}")
+
+# 특정 점수 가져오기
+print(f"첫 번째 학생 영어 점수: {grade_table[0, 1]}")
+print(f"세 번째 학생 수학 점수: {grade_table[__, __]}")</code></pre>
+                </div>
+                
+                <div class="question">
+                    <strong>❓ 질문:</strong> grade_table.shape가 (3, 3)이라고 나왔나요? 이게 무슨 뜻일까요?
+                    <div class="answer-box">
+                        <strong>내 생각:</strong><br><br><br>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>Step 3: 배열 슬라이싱 (일부분 가져오기)</h4>
+                <div class="code-block">
+                    <pre><code class="language-python">numbers = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+
+# 처음 5개 가져오기
+first_five = numbers[:5]
+print("처음 5개:", first_five)
+
+# 마지막 3개 가져오기  
+last_three = numbers[-3:]
+print("마지막 3개:", last_three)
+
+# 3번째부터 7번째까지
+middle = numbers[2:7]
+print("중간 부분:", middle)
+
+# 짝수 번째 인덱스만
+even_indices = numbers[::2]
+print("짝수 번째:", even_indices)</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-project">
+            <h2>🎮 미니 프로젝트: 간단한 이미지 만들기</h2>
+            
+            <div class="pattern-box">
+                <p><strong>숫자로 간단한 패턴을 만들어보세요!</strong></p>
+                <div class="code-block">
+                    <pre><code class="language-python"># 5x5 체스판 무늬 만들기
+chess_pattern = np.array([
+    [0, 1, 0, 1, 0],
+    [1, 0, 1, 0, 1], 
+    [0, 1, 0, 1, 0],
+    [1, 0, 1, 0, 1],
+    [0, 1, 0, 1, 0]
+])
+
+print("체스판 무늬:")
+print(chess_pattern)
+
+# 나만의 패턴 만들기 (자유상상!)
+my_pattern = np.array([
+    [__, __, __, __],
+    [__, __, __, __],
+    [__, __, __, __],
+    [__, __, __, __]
+])
+
+print("내가 만든 패턴:")
+print(my_pattern)</code></pre>
+                </div>
+                
+                <div class="answer-box">
+                    <strong>내 패턴 설명:</strong> 이 패턴은 <span class="blank-long"></span>을 나타냅니다.
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-summary">
+            <h2>🧠 오늘 배운 것 정리</h2>
+
+            <div class="question">
+                <h3>1. 오늘 새로 배운 함수들:</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                        <strong>np.zeros()</strong> → <span class="blank-long"></span>
+                    </li>
+                    <li style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                        <strong>np.ones()</strong> → <span class="blank-long"></span>
+                    </li>
+                    <li style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                        <strong>np.arange()</strong> → <span class="blank-long"></span>
+                    </li>
+                    <li style="margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                        <strong>np.random.randint()</strong> → <span class="blank-long"></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>2. 2차원 배열과 1차원 배열의 차이점은?</h3>
+                <div class="answer-box" style="min-height: 80px;">
+                    <br><br><br>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>3. 슬라이싱([시작:끝])의 규칙을 설명해보세요:</h3>
+                <div class="answer-box" style="min-height: 80px;">
+                    <br><br><br>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>🎉 Week 2 완료! 다음 시간에는 배열 연산의 신비한 세계를 탐험해요!</strong></p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                이 교재는 [학원명] 전용 교재입니다. 📚
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <script>
+        // 코드 복사 방지 스크립트
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. 우클릭 방지 (코드 블록에서만)
+            const codeBlocks = document.querySelectorAll('pre[class*="language-"]');
+            codeBlocks.forEach(block => {
+                block.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    showCopyWarning(e);
+                    return false;
+                });
+                
+                // 2. 드래그 방지
+                block.addEventListener('selectstart', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+                
+                // 3. 키보드 단축키 방지 (Ctrl+A, Ctrl+C)
+                block.addEventListener('keydown', function(e) {
+                    if (e.ctrlKey && (e.key === 'a' || e.key === 'c' || e.key === 'v')) {
+                        e.preventDefault();
+                        showCopyWarning(e);
+                        return false;
+                    }
+                });
+            });
+            
+            // 4. 개발자 도구 감지 (F12 방지)
+            document.addEventListener('keydown', function(e) {
+                // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U 방지
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    showDevToolsWarning();
+                    return false;
+                }
+            });
+        });
+
+        // 복사 시도 경고 메시지
+        function showCopyWarning(e) {
+            const warning = document.createElement('div');
+            warning.innerHTML = '⚠️ 코드를 직접 타이핑해서 연습해보세요!';
+            warning.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: #ff6b6b;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                z-index: 10000;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            `;
+            
+            document.body.appendChild(warning);
+            
+            setTimeout(() => {
+                document.body.removeChild(warning);
+            }, 3000);
+        }
+
+        // 개발자 도구 시도 경고
+        function showDevToolsWarning() {
+            alert('🚫 개발자 도구는 사용할 수 없습니다.\n직접 코드를 타이핑해서 학습해보세요!');
+        }
+
+        // 체크박스 단일 선택 (라디오 버튼처럼)
+        const quizCheckboxes = document.querySelectorAll('input[name="q1"]');
+        quizCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    quizCheckboxes.forEach(other => {
+                        if (other !== this) other.checked = false;
+                    });
+                    
+                    // 정답 체크 (숫자 계산 도구가 정답)
+                    if (this.value === 'tool') {
+                        this.parentElement.style.backgroundColor = '#e8f5e8';
+                        this.parentElement.style.borderColor = '#4caf50';
+                    } else {
+                        this.parentElement.style.backgroundColor = '#ffebee';
+                        this.parentElement.style.borderColor = '#f44336';
+                    }
+                }
+            });
+        });
+
+        // 일반 체크박스 피드백
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]:not([name="q1"])');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    checkbox.parentElement.style.backgroundColor = '#e8f5e8';
+                } else {
+                    checkbox.parentElement.style.backgroundColor = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
