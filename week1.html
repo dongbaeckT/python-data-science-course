@@ -134,6 +134,24 @@
             border-radius: 10px;
             font-size: 14px;
             margin: 10px 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            position: relative;
+        }
+
+        pre[class*="language-"]:before {
+            content: "⚠️ 코드를 직접 타이핑해보세요!";
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background: #ff6b6b;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: sans-serif;
         }
 
         .step {
@@ -449,6 +467,77 @@ print(f"20세 이상 가족 수: {np.sum(family_ages >= 20)}")</code></pre>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     
     <script>
+        // 코드 복사 방지 스크립트
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. 우클릭 방지 (코드 블록에서만)
+            const codeBlocks = document.querySelectorAll('pre[class*="language-"]');
+            codeBlocks.forEach(block => {
+                block.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    showCopyWarning(e);
+                    return false;
+                });
+                
+                // 2. 드래그 방지
+                block.addEventListener('selectstart', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+                
+                // 3. 키보드 단축키 방지 (Ctrl+A, Ctrl+C)
+                block.addEventListener('keydown', function(e) {
+                    if (e.ctrlKey && (e.key === 'a' || e.key === 'c' || e.key === 'v')) {
+                        e.preventDefault();
+                        showCopyWarning(e);
+                        return false;
+                    }
+                });
+            });
+            
+            // 4. 개발자 도구 감지 (F12 방지)
+            document.addEventListener('keydown', function(e) {
+                // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U 방지
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    showDevToolsWarning();
+                    return false;
+                }
+            });
+        });
+
+        // 복사 시도 경고 메시지
+        function showCopyWarning(e) {
+            const warning = document.createElement('div');
+            warning.innerHTML = '⚠️ 코드를 직접 타이핑해서 연습해보세요!';
+            warning.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: #ff6b6b;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                z-index: 10000;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            `;
+            
+            document.body.appendChild(warning);
+            
+            setTimeout(() => {
+                document.body.removeChild(warning);
+            }, 3000);
+        }
+
+        // 개발자 도구 시도 경고
+        function showDevToolsWarning() {
+            alert('🚫 개발자 도구는 사용할 수 없습니다.\n직접 코드를 타이핑해서 학습해보세요!');
+        }
+
         // 체크박스 상태 피드백
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
