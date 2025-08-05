@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 4 - 실전 프로젝트: 우리 반 신체 정보 분석</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8f4f0 0%, #f1ebe5 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #e8d5d3 0%, #d4c0b8 100%);
+            color: #5d4e75;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .student-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px dashed #dee2e6;
+        }
+
+        .section {
+            margin: 40px 0;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-goal {
+            background: linear-gradient(135deg, #e6f0f7 0%, #d5e5f2 100%);
+        }
+
+        .section-data {
+            background: linear-gradient(135deg, #f0e6f7 0%, #e5d5f2 100%);
+        }
+
+        .section-analysis {
+            background: linear-gradient(135deg, #e6f7e6 0%, #d5f2d5 100%);
+        }
+
+        .section-advanced {
+            background: linear-gradient(135deg, #f7f0e6 0%, #f2e5d5 100%);
+        }
+
+        .section-report {
+            background: linear-gradient(135deg, #f7e6e6 0%, #f2d5d5 100%);
+        }
+
+        .section-mission {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            color: #2c3e50;
+        }
+
+        .goal-box {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        .code-block {
+            margin: 15px 0;
+        }
+
+        pre[class*="language-"] {
+            border-radius: 10px;
+            font-size: 14px;
+            margin: 10px 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            position: relative;
+        }
+
+        pre[class*="language-"]:before {
+            content: "⚠️ 코드를 직접 타이핑해보세요!";
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background: #ff6b6b;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: sans-serif;
+        }
+
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #27ae60;
+        }
+
+        .step h4 {
+            color: #27ae60;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .result-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .result-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #4caf50;
+        }
+
+        .ranking-box {
+            background: #fff8e1;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .condition-box {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .analysis-box {
+            background: #fce4ec;
+            border: 2px solid #e91e63;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .report-section {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #9c27b0;
+        }
+
+        .report-section h4 {
+            color: #9c27b0;
+            margin-bottom: 15px;
+        }
+
+        .answer-box {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            min-height: 80px;
+        }
+
+        .mission-highlight {
+            background: #ff9800;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .blank {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 80px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .blank-long {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 200px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #5d4e75 0%, #7a6b85 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #4a3d5f 0%, #6b5a75 100%);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← 목차로 돌아가기</a>
+        
+        <div class="header">
+            <h1>📝 Week 4 워크시트</h1>
+            <h2>실전 프로젝트: 우리 반 신체 정보 분석</h2>
+            <div class="student-info">
+                <strong>이름:</strong> <span class="blank"></span> 
+                <strong>날짜:</strong> <span class="blank"></span>
+            </div>
+        </div>
+
+        <div class="section section-goal">
+            <h2>🎯 프로젝트 목표</h2>
+            <div class="goal-box">
+                <strong>오늘은 실제 데이터로 NumPy의 모든 기능을 활용해보는 날입니다!</strong>
+            </div>
+        </div>
+
+        <div class="section section-data">
+            <h2>📊 데이터 준비</h2>
+            
+            <div class="code-block">
+                <pre><code class="language-python">import numpy as np
+
+# 우리 반 10명의 신체 정보 (가상 데이터)
+names = ['김철수', '이영희', '박민수', '최지영', '정태현', 
+         '한소영', '윤준호', '장미래', '오성민', '배하늘']
+
+heights = np.array([165, 172, 158, 168, 175, 162, 180, 169, 173, 167])  # 키(cm)
+weights = np.array([55, 68, 52, 60, 70, 58, 75, 62, 69, 63])           # 몸무게(kg)
+ages = np.array([14, 15, 14, 15, 14, 15, 14, 15, 14, 15])              # 나이
+
+print("=== 우리 반 신체 정보 ===")
+print(f"학생 수: {len(heights)}명")</code></pre>
+            </div>
+        </div>
+
+        <div class="section section-analysis">
+            <h2>💻 분석 실습</h2>
+
+            <div class="step">
+                <h4>1단계: 기본 통계 계산</h4>
+                <div class="code-block">
+                    <pre><code class="language-python">print("=== 키 분석 ===")
+print(f"평균 키: {np.mean(heights):.1f}cm")
+print(f"최대 키: {np.max(heights)}cm") 
+print(f"최소 키: {np.min(heights)}cm")
+print(f"키 표준편차: {np.std(heights):.1f}cm")
+
+print("\n=== 몸무게 분석 ===")
+print(f"평균 몸무게: {np.mean(weights):.1f}kg")
+print(f"최대 몸무게: {np.max(weights)}kg")
+print(f"최소 몸무게: {np.min(weights)}kg")
+print(f"몸무게 표준편차: {np.std(weights):.1f}kg")</code></pre>
+                </div>
+                
+                <div class="result-box">
+                    <strong>📊 내 계산 결과:</strong>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <strong>평균 키:</strong> <span class="blank"></span>cm
+                        </div>
+                        <div class="result-item">
+                            <strong>키 범위:</strong> <span class="blank"></span>cm ~ <span class="blank"></span>cm
+                        </div>
+                        <div class="result-item">
+                            <strong>평균 몸무게:</strong> <span class="blank"></span>kg
+                        </div>
+                        <div class="result-item">
+                            <strong>몸무게 범위:</strong> <span class="blank"></span>kg ~ <span class="blank"></span>kg
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>2단계: BMI 계산하기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># BMI = 몸무게(kg) / (키(m))²
+bmi = weights / ((heights/100) ** 2)
+
+print("=== BMI 분석 ===")
+print(f"평균 BMI: {np.mean(bmi):.1f}")
+print(f"최고 BMI: {np.max(bmi):.1f}")
+print(f"최저 BMI: {np.min(bmi):.1f}")
+
+# BMI 상태 분석
+underweight = np.sum(bmi < 18.5)  # 저체중
+normal = np.sum((bmi >= 18.5) & (bmi < 23))  # 정상
+overweight = np.sum(bmi >= 23)  # 과체중
+
+print(f"저체중: {underweight}명")
+print(f"정상체중: {normal}명") 
+print(f"과체중: {overweight}명")</code></pre>
+                </div>
+                
+                <div class="result-box">
+                    <strong>📊 BMI 기록:</strong>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <strong>평균 BMI:</strong> <span class="blank"></span>
+                        </div>
+                        <div class="result-item">
+                            <strong>저체중:</strong> <span class="blank"></span>명, <strong>정상:</strong> <span class="blank"></span>명, <strong>과체중:</strong> <span class="blank"></span>명
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>3단계: 키 순서대로 정렬하기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 키 순서로 정렬하기 위한 인덱스
+height_order = np.argsort(heights)
+
+print("=== 키 순서 (작은 순) ===")
+for i, idx in enumerate(height_order):
+    print(f"{i+1}등: {names[idx]} - {heights[idx]}cm, {weights[idx]}kg")
+
+# 키 큰 순서
+reverse_order = np.argsort(heights)[::-1]
+
+print("\n=== 키 순서 (큰 순) ===")  
+for i, idx in enumerate(reverse_order[:3]):  # 상위 3명만
+    print(f"{i+1}등: {names[idx]} - {heights[idx]}cm")</code></pre>
+                </div>
+                
+                <div class="ranking-box">
+                    <strong>🏆 순위 기록:</strong>
+                    <div style="margin-top: 15px;">
+                        <div style="margin: 10px 0;">
+                            <strong>1등 (가장 키 큰 사람):</strong> <span class="blank-long"></span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>2등:</strong> <span class="blank-long"></span>
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>3등:</strong> <span class="blank-long"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>4단계: 조건별 분석</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 키 170cm 이상인 학생들
+tall_students = heights >= 170
+print("=== 키 170cm 이상 학생들 ===")
+for i, is_tall in enumerate(tall_students):
+    if is_tall:
+        print(f"{names[i]}: {heights[i]}cm")
+
+print(f"총 {np.sum(tall_students)}명")
+
+# 몸무게가 평균보다 가벼운 학생들
+avg_weight = np.mean(weights)
+light_students = weights < avg_weight
+
+print(f"\n=== 평균({avg_weight:.1f}kg)보다 가벼운 학생들 ===")
+for i, is_light in enumerate(light_students):
+    if is_light:
+        print(f"{names[i]}: {weights[i]}kg")</code></pre>
+                </div>
+                
+                <div class="condition-box">
+                    <strong>📋 조건별 결과:</strong>
+                    <div style="margin-top: 15px;">
+                        <div style="margin: 10px 0;">
+                            <strong>키 170cm 이상:</strong> <span class="blank"></span>명
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>평균보다 가벼운 학생:</strong> <span class="blank"></span>명
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-advanced">
+            <h2>🔍 심화 분석</h2>
+
+            <div class="step">
+                <h4>연령별 분석</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 14세와 15세 그룹 비교
+age_14 = ages == 14
+age_15 = ages == 15
+
+print("=== 연령별 비교 ===")
+print(f"14세 평균 키: {np.mean(heights[age_14]):.1f}cm")
+print(f"15세 평균 키: {np.mean(heights[age_15]):.1f}cm")
+print(f"14세 평균 몸무게: {np.mean(weights[age_14]):.1f}kg")
+print(f"15세 평균 몸무게: {np.mean(weights[age_15]):.1f}kg")</code></pre>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>상관관계 분석 (심화)</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 키와 몸무게의 관계
+correlation = np.corrcoef(heights, weights)[0, 1]
+print(f"키와 몸무게의 상관관계: {correlation:.3f}")
+
+# 상관관계 해석
+if correlation > 0.7:
+    print("강한 양의 상관관계 - 키가 클수록 몸무게도 많이 나간다")
+elif correlation > 0.3:
+    print("약한 양의 상관관계 - 키와 몸무게가 어느 정도 관련있다")
+else:
+    print("상관관계가 약하다")</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>🔗 상관관계 결과:</strong>
+                    <div style="margin-top: 15px;">
+                        상관계수: <span class="blank"></span> → <span class="blank-long"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-report">
+            <h2>🧠 결과 해석 및 보고서</h2>
+
+            <div class="report-section">
+                <h4>1. 우리 반 특징 3가지</h4>
+                <div class="answer-box">
+                    <strong>1)</strong><br><br><br>
+                    <strong>2)</strong><br><br><br>
+                    <strong>3)</strong><br><br><br>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h4>2. 가장 흥미로운 발견</h4>
+                <div class="answer-box">
+                    <br><br><br>
+                </div>
+            </div>
+
+            <div class="report-section">
+                <h4>3. 추가로 분석해보고 싶은 것</h4>
+                <div class="answer-box">
+                    <br><br><br>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-mission">
+            <h2>🏠 추가 미션 (선택)</h2>
+            
+            <div class="mission-highlight">
+                <strong>집에서 해보기:</strong> 가족 데이터로 같은 분석 해보기
+            </div>
+            
+            <div class="code-block">
+                <pre><code class="language-python"># 우리 가족 데이터 입력
+family_heights = np.array([엄마키, 아빠키, 내키, ...])
+family_weights = np.array([엄마몸무게, 아빠몸무게, 내몸무게, ...])
+
+# 같은 분석 반복
+family_bmi = family_weights / ((family_heights/100) ** 2)
+print(f"우리 가족 평균 BMI: {np.mean(family_bmi):.1f}")</code></pre>
+            </div>
+            
+            <div style="background: #f8f5f0; border: 2px solid #e6d4a3; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <strong>📸 결과 스크린샷을 찍어서 선생님께 보여주세요!</strong>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>🎉 Week 4 완료! 첫 번째 실전 프로젝트를 성공적으로 마쳤어요!</strong></p>
+            <p><strong>다음 시간에는 Matplotlib으로 그래프 그리기를 배워요!</strong></p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                이 교재는 [학원명] 전용 교재입니다. 📚
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <script>
+        // 코드 복사 방지 스크립트
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. 우클릭 방지 (코드 블록에서만)
+            const codeBlocks = document.querySelectorAll('pre[class*="language-"]');
+            codeBlocks.forEach(block => {
+                block.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    showCopyWarning(e);
+                    return false;
+                });
+                
+                // 2. 드래그 방지
+                block.addEventListener('selectstart', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+                
+                // 3. 키보드 단축키 방지 (Ctrl+A, Ctrl+C)
+                block.addEventListener('keydown', function(e) {
+                    if (e.ctrlKey && (e.key === 'a' || e.key === 'c' || e.key === 'v')) {
+                        e.preventDefault();
+                        showCopyWarning(e);
+                        return false;
+                    }
+                });
+            });
+            
+            // 4. 개발자 도구 감지 (F12 방지)
+            document.addEventListener('keydown', function(e) {
+                // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U 방지
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    showDevToolsWarning();
+                    return false;
+                }
+            });
+        });
+
+        // 복사 시도 경고 메시지
+        function showCopyWarning(e) {
+            const warning = document.createElement('div');
+            warning.innerHTML = '⚠️ 코드를 직접 타이핑해서 연습해보세요!';
+            warning.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: #ff6b6b;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                z-index: 10000;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            `;
+            
+            document.body.appendChild(warning);
+            
+            setTimeout(() => {
+                document.body.removeChild(warning);
+            }, 3000);
+        }
+
+        // 개발자 도구 시도 경고
+        function showDevToolsWarning() {
+            alert('🚫 개발자 도구는 사용할 수 없습니다.\n직접 코드를 타이핑해서 학습해보세요!');
+        }
+
+        // 체크박스 피드백
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    checkbox.parentElement.style.backgroundColor = '#e8f5e8';
+                } else {
+                    checkbox.parentElement.style.backgroundColor = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
