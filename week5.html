@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 5 - 그래프로 이야기하기</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8f4f0 0%, #f1ebe5 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #e8d5d3 0%, #d4c0b8 100%);
+            color: #5d4e75;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .student-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px dashed #dee2e6;
+        }
+
+        .section {
+            margin: 40px 0;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-thinking {
+            background: linear-gradient(135deg, #f7e6e6 0%, #f2d5d5 100%);
+        }
+
+        .section-first {
+            background: linear-gradient(135deg, #e6f0f7 0%, #d5e5f2 100%);
+        }
+
+        .section-mission {
+            background: linear-gradient(135deg, #f0e6f7 0%, #e5d5f2 100%);
+        }
+
+        .section-summary {
+            background: linear-gradient(135deg, #e6f7e6 0%, #d5f2d5 100%);
+        }
+
+        .section-homework {
+            background: linear-gradient(135deg, #f7f0e6 0%, #f2e5d5 100%);
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            color: #2c3e50;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+
+        .answer-box {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            min-height: 60px;
+        }
+
+        .code-block {
+            margin: 15px 0;
+        }
+
+        pre[class*="language-"] {
+            border-radius: 10px;
+            font-size: 14px;
+            margin: 10px 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            position: relative;
+        }
+
+        pre[class*="language-"]:before {
+            content: "⚠️ 코드를 직접 타이핑해보세요!";
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background: #ff6b6b;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: sans-serif;
+        }
+
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #27ae60;
+        }
+
+        .step h4 {
+            color: #27ae60;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .checkbox {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .checkbox input {
+            width: 18px;
+            height: 18px;
+        }
+
+        .analysis-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .mission-box {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .mission-box h4 {
+            color: #f57c00;
+            margin-bottom: 15px;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .concept-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .list-styled {
+            list-style: none;
+            padding: 0;
+        }
+
+        .list-styled li {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 3px solid #3498db;
+        }
+
+        .homework-highlight {
+            background: #ff9800;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .blank {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 80px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .blank-long {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 200px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #5d4e75 0%, #7a6b85 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #4a3d5f 0%, #6b5a75 100%);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+
+            .concept-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← 목차로 돌아가기</a>
+        
+        <div class="header">
+            <h1>📝 Week 5 학생용 워크시트</h1>
+            <h2>그래프로 이야기하기 - Matplotlib 입문</h2>
+            <div class="student-info">
+                <strong>이름:</strong> <span class="blank"></span> 
+                <strong>날짜:</strong> <span class="blank"></span>
+            </div>
+        </div>
+
+        <div class="section section-thinking">
+            <h2>🤔 수업 전 생각해보기</h2>
+            
+            <div class="question">
+                <h3>1. 지금까지 배운 NumPy로 무엇을 할 수 있었나요? (3개 이상)</h3>
+                <ul class="list-styled">
+                    <li><strong>예시:</strong> 배열 만들기</li>
+                    <li><span class="blank-long"></span></li>
+                    <li><span class="blank-long"></span></li>
+                    <li><span class="blank-long"></span></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>2. 숫자로만 된 분석 결과 vs 그래프로 된 결과, 어느 쪽이 더 이해하기 쉬울까요?</h3>
+                <div class="answer-box">
+                    <strong>내 생각:</strong><br><br><br>
+                    <strong>이유:</strong><br><br>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>3. 어떤 그래프들을 본 적이 있나요?</h3>
+                <ul class="list-styled">
+                    <li><strong>TV 뉴스에서:</strong> <span class="blank-long"></span></li>
+                    <li><strong>유튜브에서:</strong> <span class="blank-long"></span></li>
+                    <li><strong>학교에서:</strong> <span class="blank-long"></span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section section-first">
+            <h2>💻 첫 번째 그래프 그리기</h2>
+
+            <div class="step">
+                <h4>Step 1: Matplotlib 준비하기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+# 한글 폰트 설정 (필요시)
+plt.rcParams['font.family'] = 'DejaVu Sans'
+
+print("Matplotlib 준비 완료! 🎨")</code></pre>
+                </div>
+                <div class="checkbox">
+                    <input type="checkbox" id="check1">
+                    <label for="check1">✅ 체크: 에러 없이 실행되었나요?</label>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>Step 2: 내 일주일 기분 그래프</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 일주일 동안의 내 기분 점수 (1-10점)
+days = ['월', '화', '수', '목', '금', '토', '일']
+mood_scores = [__, __, __, __, __, __, __]  # 실제 점수 입력
+
+# 선 그래프 그리기
+plt.figure(figsize=(10, 6))
+plt.plot(days, mood_scores, marker='o', linewidth=2, markersize=8)
+plt.title('내 일주일 기분 변화')
+plt.xlabel('요일')
+plt.ylabel('기분 점수 (1-10)')
+plt.grid(True)
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>📊 내 기분 분석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>가장 좋았던 날:</strong> <span class="blank"></span>요일 (<span class="blank"></span>점)</li>
+                        <li style="margin: 8px 0;"><strong>가장 나빴던 날:</strong> <span class="blank"></span>요일 (<span class="blank"></span>점)</li>
+                        <li style="margin: 8px 0;"><strong>주말 vs 평일 기분:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>Step 3: 그래프 꾸미기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 더 예쁜 그래프 만들기
+plt.figure(figsize=(10, 6))
+plt.plot(days, mood_scores, 
+         marker='o',           # 점 모양: 'o', 's', '^', '*' 등
+         linewidth=3,          # 선 두께
+         markersize=10,        # 점 크기
+         color='___',          # 원하는 색상 입력
+         linestyle='___')      # 선 스타일: '-', '--', '-.', ':' 등
+
+plt.title('내 일주일 기분 변화 (꾸미기 버전)', fontsize=16)
+plt.xlabel('요일', fontsize=12)
+plt.ylabel('기분 점수', fontsize=12)
+plt.grid(True, alpha=0.3)
+plt.ylim(0, 10)  # y축 범위 설정
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>🎨 사용한 꾸미기 옵션:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>색상:</strong> <span class="blank"></span></li>
+                        <li style="margin: 8px 0;"><strong>선 스타일:</strong> <span class="blank"></span></li>
+                        <li style="margin: 8px 0;"><strong>특별한 이유:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-mission">
+            <h2>🎮 실습 미션</h2>
+
+            <div class="mission-box">
+                <h4>미션 1: 내 수면시간 그래프</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 일주일 수면시간 데이터
+sleep_hours = [__, __, __, __, __, __, __]  # 실제 수면시간 입력
+
+plt.figure(figsize=(10, 6))
+plt.plot(days, sleep_hours, marker='s', linewidth=2, 
+         markersize=8, color='blue')
+
+# 권장 수면시간 선 추가
+recommended_sleep = [8] * 7  # 8시간 권장
+plt.plot(days, recommended_sleep, '--', color='red', 
+         alpha=0.7, label='권장 수면시간 (8시간)')
+
+plt.title('내 일주일 수면시간')
+plt.xlabel('요일')
+plt.ylabel('수면시간 (시간)')
+plt.legend()  # 범례 표시
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>😴 수면 패턴 분석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>평균 수면시간:</strong> <span class="blank"></span>시간</li>
+                        <li style="margin: 8px 0;"><strong>권장 시간보다 부족한 날:</strong> <span class="blank"></span>일</li>
+                        <li style="margin: 8px 0;"><strong>개선 계획:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mission-box">
+                <h4>미션 2: 여러 선을 한 그래프에</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 공부시간과 게임시간 비교
+study_hours = [__, __, __, __, __, __, __]
+game_hours = [__, __, __, __, __, __, __]
+
+plt.figure(figsize=(12, 6))
+plt.plot(days, study_hours, 'o-', label='공부시간', 
+         linewidth=2, markersize=8, color='green')
+plt.plot(days, game_hours, 's-', label='게임시간', 
+         linewidth=2, markersize=8, color='orange')
+
+plt.title('공부시간 vs 게임시간')
+plt.xlabel('요일')
+plt.ylabel('시간')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>⏰ 시간 사용 패턴 분석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>공부 > 게임인 날:</strong> <span class="blank"></span>일</li>
+                        <li style="margin: 8px 0;"><strong>가장 균형잡힌 날:</strong> <span class="blank"></span>요일</li>
+                        <li style="margin: 8px 0;"><strong>개선하고 싶은 점:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mission-box">
+                <h4>미션 3: 창의적 그래프 만들기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 자유 주제로 그래프 만들기
+# 아이디어: 내 키 성장, 용돈 사용, 독서량, 운동량 등
+
+my_data_name = "___________"  # 데이터 이름
+my_data = [__, __, __, __, __, __, __]  # 데이터 입력
+
+plt.figure(figsize=(10, 6))
+# 여기서 창의적으로 꾸며보세요!
+plt.plot(days, my_data, marker='___', linewidth=___, 
+         markersize=___, color='___')
+
+plt.title(f'내 {my_data_name} 변화')
+plt.xlabel('요일')
+plt.ylabel(my_data_name)
+plt.grid(True)
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>🎨 창의적 그래프 설명:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>주제:</strong> <span class="blank-long"></span></li>
+                        <li style="margin: 8px 0;"><strong>발견한 패턴:</strong> <span class="blank-long"></span></li>
+                        <li style="margin: 8px 0;"><strong>느낀 점:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-summary">
+            <h2>🧠 오늘 배운 것 정리</h2>
+
+            <div class="question">
+                <h3>Matplotlib 기본 함수들</h3>
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <strong>plt.plot()</strong> → <span class="blank"></span>
+                    </div>
+                    <div class="concept-card">
+                        <strong>plt.title()</strong> → <span class="blank"></span>
+                    </div>
+                    <div class="concept-card">
+                        <strong>plt.xlabel()</strong> → <span class="blank"></span>
+                    </div>
+                    <div class="concept-card">
+                        <strong>plt.ylabel()</strong> → <span class="blank"></span>
+                    </div>
+                    <div class="concept-card">
+                        <strong>plt.grid()</strong> → <span class="blank"></span>
+                    </div>
+                    <div class="concept-card">
+                        <strong>plt.legend()</strong> → <span class="blank"></span>
+                    </div>
+                    <div class="concept-card">
+                        <strong>plt.show()</strong> → <span class="blank"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>그래프 꾸미기 옵션들</h3>
+                <div class="concept-grid">
+                    <div class="concept-card">
+                        <strong>marker</strong> → <span class="blank"></span>
+                    </div>
+                    <div class="concept-card">
+                        <strong>linewidth</strong> → <span class="blank"></span>
+                    </div>
+                    <div class="concept-card">
+                        <strong>markersize</strong> → <span class="blank"></span>
+                    </div>
+                    <div class="concept-card">
+                        <strong>color</strong> → <span class="blank"></span>
+                    </div>
+                    <div class="concept-card">
+                        <strong>linestyle</strong> → <span class="blank"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>그래프의 장점 3가지</h3>
+                <ul class="list-styled">
+                    <li>1. <span class="blank-long"></span></li>
+                    <li>2. <span class="blank-long"></span></li>
+                    <li>3. <span class="blank-long"></span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section section-homework">
+            <h2>🏠 미션: 우리 가족 비교 그래프 만들기</h2>
+            
+            <div class="homework-highlight">
+                <strong>집에서 해보기:</strong> 가족 데이터로 재미있는 그래프 만들어보기
+            </div>
+            
+            <div class="code-block">
+                <pre><code class="language-python"># 예시: 가족들의 하루 스마트폰 사용시간
+family_members = ['엄마', '아빠', '나', '형/누나']
+phone_hours = [__, __, __, __]  # 실제 데이터 입력
+
+plt.figure(figsize=(8, 6))
+plt.plot(family_members, phone_hours, 'o-', linewidth=3, markersize=10)
+plt.title('우리 가족 스마트폰 사용시간')
+plt.xlabel('가족')
+plt.ylabel('사용시간 (시간)')
+plt.grid(True)
+plt.show()</code></pre>
+            </div>
+            
+            <div style="background: #f8f5f0; border: 2px solid #e6d4a3; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <strong>📸 완성한 그래프 스크린샷을 찍어서 선생님께 보여주세요!</strong>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>🎉 Week 5 완료! Matplotlib의 기본을 완전히 마스터했어요!</strong></p>
+            <p><strong>다음 시간에는 다양한 종류의 그래프들을 그려볼 거예요!</strong></p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                이 교재는 [학원명] 전용 교재입니다. 📚
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <script>
+        // 코드 복사 방지 스크립트
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. 우클릭 방지 (코드 블록에서만)
+            const codeBlocks = document.querySelectorAll('pre[class*="language-"]');
+            codeBlocks.forEach(block => {
+                block.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                    showCopyWarning(e);
+                    return false;
+                });
+                
+                // 2. 드래그 방지
+                block.addEventListener('selectstart', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+                
+                // 3. 키보드 단축키 방지 (Ctrl+A, Ctrl+C)
+                block.addEventListener('keydown', function(e) {
+                    if (e.ctrlKey && (e.key === 'a' || e.key === 'c' || e.key === 'v')) {
+                        e.preventDefault();
+                        showCopyWarning(e);
+                        return false;
+                    }
+                });
+            });
+            
+            // 4. 개발자 도구 감지 (F12 방지)
+            document.addEventListener('keydown', function(e) {
+                // F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U 방지
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                    showDevToolsWarning();
+                    return false;
+                }
+            });
+        });
+
+        // 복사 시도 경고 메시지
+        function showCopyWarning(e) {
+            const warning = document.createElement('div');
+            warning.innerHTML = '⚠️ 코드를 직접 타이핑해서 연습해보세요!';
+            warning.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: #ff6b6b;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                z-index: 10000;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            `;
+            
+            document.body.appendChild(warning);
+            
+            setTimeout(() => {
+                document.body.removeChild(warning);
+            }, 3000);
+        }
+
+        // 개발자 도구 시도 경고
+        function showDevToolsWarning() {
+            alert('🚫 개발자 도구는 사용할 수 없습니다.\n직접 코드를 타이핑해서 학습해보세요!');
+        }
+
+        // 체크박스 피드백
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    checkbox.parentElement.style.backgroundColor = '#e8f5e8';
+                } else {
+                    checkbox.parentElement.style.backgroundColor = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
