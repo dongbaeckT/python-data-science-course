@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 6 - 다양한 그래프 그려보기</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8f4f0 0%, #f1ebe5 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #e8d5d3 0%, #d4c0b8 100%);
+            color: #5d4e75;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .student-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px dashed #dee2e6;
+        }
+
+        .section {
+            margin: 40px 0;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-review {
+            background: linear-gradient(135deg, #f7e6e6 0%, #f2d5d5 100%);
+        }
+
+        .section-graphs {
+            background: linear-gradient(135deg, #e6f0f7 0%, #d5e5f2 100%);
+        }
+
+        .section-mission {
+            background: linear-gradient(135deg, #f0e6f7 0%, #e5d5f2 100%);
+        }
+
+        .section-creative {
+            background: linear-gradient(135deg, #e6f7e6 0%, #d5f2d5 100%);
+        }
+
+        .section-summary {
+            background: linear-gradient(135deg, #f7f0e6 0%, #f2e5d5 100%);
+        }
+
+        .section-homework {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        }
+
+        .section-reflection {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            color: #2c3e50;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: #3498db;
+            background: #e3f2fd;
+        }
+
+        .quiz-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .answer-box {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            min-height: 60px;
+        }
+
+        .code-block {
+            margin: 15px 0;
+        }
+
+        pre[class*="language-"] {
+            border-radius: 10px;
+            font-size: 14px;
+            margin: 10px 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            position: relative;
+        }
+
+        pre[class*="language-"]:before {
+            content: "⚠️ 코드를 직접 타이핑해보세요!";
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background: #ff6b6b;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: sans-serif;
+        }
+
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #27ae60;
+        }
+
+        .step h4 {
+            color: #27ae60;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .analysis-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .mission-box {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .mission-box h4 {
+            color: #f57c00;
+            margin-bottom: 15px;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .concept-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .usage-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #ddd;
+        }
+
+        .best-graph-box {
+            background: #fff8e1;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .homework-highlight {
+            background: #ff9800;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .reflection-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        .blank {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 80px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .blank-long {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 200px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #5d4e75 0%, #7a6b85 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #4a3d5f 0%, #6b5a75 100%);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+
+            .quiz-options {
+                flex-direction: column;
+            }
+
+            .concept-grid, .usage-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← 목차로 돌아가기</a>
+        
+        <div class="header">
+            <h1>📝 Week 6 학생용 워크시트</h1>
+            <h2>다양한 그래프 그려보기</h2>
+            <div class="student-info">
+                <strong>이름:</strong> <span class="blank"></span> 
+                <strong>날짜:</strong> <span class="blank"></span>
+            </div>
+        </div>
+
+        <div class="section section-review">
+            <h2>🤔 복습 퀴즈</h2>
+            
+            <div class="question">
+                <h3>1. 지난 시간에 배운 plt.plot()은 어떤 그래프를 그리나요?</h3>
+                <div class="quiz-options">
+                    <label class="quiz-option">
+                        <input type="checkbox" name="q1" value="bar">
+                        막대그래프
+                    </label>
+                    <label class="quiz-option">
+                        <input type="checkbox" name="q1" value="line">
+                        선그래프
+                    </label>
+                    <label class="quiz-option">
+                        <input type="checkbox" name="q1" value="pie">
+                        원그래프
+                    </label>
+                    <label class="quiz-option">
+                        <input type="checkbox" name="q1" value="hist">
+                        히스토그램
+                    </label>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>2. 그래프에 격자를 추가하는 함수는?</h3>
+                <div class="answer-box">
+                    <strong>답:</strong> plt.<span class="blank"></span>()
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>3. 여러 선을 구분하기 위한 범례를 추가하는 함수는?</h3>
+                <div class="answer-box">
+                    <strong>답:</strong> plt.<span class="blank"></span>()
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-graphs">
+            <h2>💻 새로운 그래프들 배우기</h2>
+
+            <div class="step">
+                <h4>Step 1: 막대그래프 (Bar Chart) - 카테고리 비교의 왕</h4>
+                <div class="code-block">
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+# 우리 반이 좋아하는 과목 설문조사 결과
+subjects = ['수학', '과학', '영어', '국어', '체육', '음악']
+votes = [__, __, __, __, __, __]  # 실제 설문 결과 입력
+
+plt.figure(figsize=(10, 6))
+bars = plt.bar(subjects, votes, 
+               color=['red', 'blue', 'green', 'orange', 'purple', 'pink'],
+               alpha=0.7,  # 투명도
+               edgecolor='black',  # 테두리 색
+               linewidth=1)
+
+plt.title('우리 반이 좋아하는 과목')
+plt.xlabel('과목')
+plt.ylabel('득표 수')
+plt.xticks(rotation=45)  # x축 라벨 45도 회전
+
+# 막대 위에 숫자 표시
+for i, v in enumerate(votes):
+    plt.text(i, v + 0.1, str(v), ha='center', va='bottom', fontweight='bold')
+
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>📊 막대그래프 분석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>1위 과목:</strong> <span class="blank"></span> (<span class="blank"></span>표)</li>
+                        <li style="margin: 8px 0;"><strong>꼴찌 과목:</strong> <span class="blank"></span> (<span class="blank"></span>표)</li>
+                        <li style="margin: 8px 0;"><strong>예상과 다른 결과:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>Step 2: 원그래프 (Pie Chart) - 비율의 마법사</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 같은 데이터를 원그래프로
+plt.figure(figsize=(8, 8))
+colors = ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#ff99cc', '#c2c2f0']
+
+wedges, texts, autotexts = plt.pie(votes, 
+                                  labels=subjects, 
+                                  autopct='%1.1f%%',    # 퍼센트 표시
+                                  startangle=90,        # 시작 각도
+                                  colors=colors,
+                                  explode=[0.1, 0, 0, 0, 0, 0])  # 첫 번째 조각 분리
+
+plt.title('좋아하는 과목 비율', fontsize=16)
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>🥧 원그래프 해석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>가장 큰 비율:</strong> <span class="blank"></span>% (<span class="blank"></span>과목)</li>
+                        <li style="margin: 8px 0;"><strong>50% 이상 차지하는 과목:</strong> <span class="blank"></span></li>
+                        <li style="margin: 8px 0;"><strong>막대그래프 vs 원그래프, 어느 게 더 보기 좋나요?</strong> <span class="blank"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>Step 3: 히스토그램 (Histogram) - 분포의 탐정</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 우리 반 키 분포 분석
+np.random.seed(42)  # 같은 결과를 위해
+heights = np.random.normal(165, 8, 30)  # 평균 165cm, 표준편차 8, 30명
+
+plt.figure(figsize=(10, 6))
+n, bins, patches = plt.hist(heights, 
+                           bins=8,           # 구간 개수
+                           color='skyblue', 
+                           alpha=0.7,
+                           edgecolor='black',
+                           density=False)    # 빈도수로 표시
+
+plt.title('우리 반 키 분포')
+plt.xlabel('키 (cm)')
+plt.ylabel('학생 수')
+plt.grid(True, alpha=0.3)
+
+# 평균선 표시
+mean_height = np.mean(heights)
+plt.axvline(mean_height, color='red', linestyle='--', 
+           label=f'평균: {mean_height:.1f}cm')
+plt.legend()
+plt.show()
+
+print(f"평균 키: {np.mean(heights):.1f}cm")
+print(f"가장 많은 학생이 있는 키 구간: {bins[np.argmax(n)]:.1f}~{bins[np.argmax(n)+1]:.1f}cm")</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>📏 히스토그램 분석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>평균 키:</strong> <span class="blank"></span>cm</li>
+                        <li style="margin: 8px 0;"><strong>가장 흔한 키 구간:</strong> <span class="blank"></span>cm ~ <span class="blank"></span>cm</li>
+                        <li style="margin: 8px 0;">
+                            <strong>분포 모양:</strong>
+                            <label style="margin: 0 10px;"><input type="checkbox"> 정규분포 같음</label>
+                            <label style="margin: 0 10px;"><input type="checkbox"> 왼쪽 치우침</label>
+                            <label style="margin: 0 10px;"><input type="checkbox"> 오른쪽 치우침</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-mission">
+            <h2>🎮 실습 미션들</h2>
+
+            <div class="mission-box">
+                <h4>미션 1: 나의 하루 시간 사용 분석</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 24시간을 어떻게 보내는지 분석
+activities = ['수면', '학교', '학원', '숙제', '식사', '여가', '기타']
+hours = [__, __, __, __, __, __, __]  # 실제 시간 입력 (합계 24시간)
+
+# 1) 막대그래프로 표현
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)  # 1행 2열 중 첫 번째
+plt.bar(activities, hours, color='lightcoral')
+plt.title('하루 시간 사용 (막대그래프)')
+plt.ylabel('시간')
+plt.xticks(rotation=45)
+
+# 2) 원그래프로 표현
+plt.subplot(1, 2, 2)  # 1행 2열 중 두 번째
+plt.pie(hours, labels=activities, autopct='%1.1f%%', startangle=90)
+plt.title('하루 시간 사용 (원그래프)')
+
+plt.tight_layout()  # 자동 레이아웃 조정
+plt.show()
+
+# 분석
+total_study = hours[1] + hours[2] + hours[3]  # 학교+학원+숙제
+print(f"총 공부시간: {total_study}시간 ({total_study/24*100:.1f}%)")</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>⏰ 시간 사용 패턴 분석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>가장 많은 시간을 보내는 활동:</strong> <span class="blank"></span> (<span class="blank"></span>시간)</li>
+                        <li style="margin: 8px 0;"><strong>총 공부시간:</strong> <span class="blank"></span>시간 (<span class="blank"></span>%)</li>
+                        <li style="margin: 8px 0;"><strong>개선하고 싶은 점:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mission-box">
+                <h4>미션 2: 월별 용돈 vs 지출 비교</h4>
+                <div class="code-block">
+                    <pre><code class="language-python">months = ['1월', '2월', '3월', '4월', '5월', '6월']
+allowance = [__, __, __, __, __, __]  # 받은 용돈
+spending = [__, __, __, __, __, __]   # 쓴 돈
+
+plt.figure(figsize=(10, 6))
+x = np.arange(len(months))
+width = 0.35
+
+# 나란히 놓인 막대그래프
+plt.bar(x - width/2, allowance, width, label='받은 용돈', 
+        color='lightblue', alpha=0.8)
+plt.bar(x + width/2, spending, width, label='쓴 돈', 
+        color='lightcoral', alpha=0.8)
+
+plt.title('월별 용돈 vs 지출')
+plt.xlabel('월')
+plt.ylabel('금액 (원)')
+plt.xticks(x, months)
+plt.legend()
+plt.grid(True, alpha=0.3)
+
+# 저축 계산 및 표시
+savings = np.array(allowance) - np.array(spending)
+for i, saving in enumerate(savings):
+    if saving >= 0:
+        plt.text(i, max(allowance[i], spending[i]) + 1000, 
+                f'+{saving:,}', ha='center', color='green', fontweight='bold')
+    else:
+        plt.text(i, max(allowance[i], spending[i]) + 1000, 
+                f'{saving:,}', ha='center', color='red', fontweight='bold')
+
+plt.show()
+
+print(f"총 저축액: {np.sum(savings):,}원")
+print(f"평균 월 저축: {np.mean(savings):,.0f}원")</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>💰 용돈 관리 분석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>가장 많이 저축한 달:</strong> <span class="blank"></span>월 (<span class="blank"></span>원)</li>
+                        <li style="margin: 8px 0;"><strong>적자가 난 달:</strong> <span class="blank"></span>월 (<span class="blank"></span>원)</li>
+                        <li style="margin: 8px 0;">
+                            <strong>저축 습관 평가:</strong>
+                            <label style="margin: 0 10px;"><input type="checkbox"> 우수</label>
+                            <label style="margin: 0 10px;"><input type="checkbox"> 보통</label>
+                            <label style="margin: 0 10px;"><input type="checkbox"> 개선 필요</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mission-box">
+                <h4>미션 3: 우리 반 성적 분포 히스토그램</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 가상의 우리 반 시험 점수 (30명)
+np.random.seed(123)
+scores = np.random.normal(78, 12, 30)  # 평균 78점, 표준편차 12
+scores = np.clip(scores, 0, 100)  # 0-100점 범위로 제한
+
+plt.figure(figsize=(12, 8))
+
+# 전체 히스토그램
+plt.subplot(2, 2, 1)
+plt.hist(scores, bins=8, color='lightgreen', alpha=0.7, edgecolor='black')
+plt.title('전체 점수 분포')
+plt.xlabel('점수')
+plt.ylabel('학생 수')
+plt.axvline(np.mean(scores), color='red', linestyle='--', 
+           label=f'평균: {np.mean(scores):.1f}점')
+plt.legend()
+
+# 등급별 분류
+A_grade = scores[scores >= 90]
+B_grade = scores[(scores >= 80) & (scores < 90)]
+C_grade = scores[(scores >= 70) & (scores < 80)]
+D_grade = scores[scores < 70]
+
+# 등급별 학생 수
+plt.subplot(2, 2, 2)
+grades = ['A급\n(90+)', 'B급\n(80-89)', 'C급\n(70-79)', 'D급\n(70미만)']
+counts = [len(A_grade), len(B_grade), len(C_grade), len(D_grade)]
+colors = ['gold', 'lightgreen', 'orange', 'lightcoral']
+
+plt.bar(grades, counts, color=colors)
+plt.title('등급별 학생 수')
+plt.ylabel('학생 수')
+
+# 등급별 비율 (원그래프)
+plt.subplot(2, 2, 3)
+plt.pie(counts, labels=grades, autopct='%1.1f%%', colors=colors, startangle=90)
+plt.title('등급별 비율')
+
+# 점수 구간별 상세 분석
+plt.subplot(2, 2, 4)
+bins = [0, 60, 70, 80, 90, 100]
+plt.hist(scores, bins=bins, color='skyblue', alpha=0.7, edgecolor='black')
+plt.title('점수 구간별 분포')
+plt.xlabel('점수 구간')
+plt.ylabel('학생 수')
+plt.xticks([60, 70, 80, 90, 100])
+
+plt.tight_layout()
+plt.show()
+
+# 통계 출력
+print("=== 우리 반 성적 분석 ===")
+print(f"평균 점수: {np.mean(scores):.1f}점")
+print(f"최고 점수: {np.max(scores):.1f}점")
+print(f"최저 점수: {np.min(scores):.1f}점")
+print(f"A급 학생: {len(A_grade)}명 ({len(A_grade)/len(scores)*100:.1f}%)")
+print(f"평균 이상 학생: {np.sum(scores >= np.mean(scores))}명")</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>📈 성적 분포 분석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>우리 반 평균:</strong> <span class="blank"></span>점</li>
+                        <li style="margin: 8px 0;"><strong>A급 비율:</strong> <span class="blank"></span>% (<span class="blank"></span>명)</li>
+                        <li style="margin: 8px 0;"><strong>가장 많은 학생이 속한 구간:</strong> <span class="blank"></span></li>
+                        <li style="margin: 8px 0;"><strong>분포의 특징:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-creative">
+            <h2>🎨 창의적 그래프 만들기</h2>
+            
+            <div class="mission-box">
+                <h4>나만의
