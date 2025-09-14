@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 8 학생용 워크시트 - 우리 동네 날씨 데이터 시각화</title>
+    <style>
+        /* 복사 방지를 위한 스타일 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: #ffffff;
+            color: #333;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: bold;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #2980b9;
+            border-left: 5px solid #3498db;
+            padding-left: 15px;
+            margin-top: 30px;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        h3 {
+            color: #e74c3c;
+            margin-top: 25px;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        h4 {
+            color: #8e44ad;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        .header-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border: 2px solid #3498db;
+            border-radius: 10px;
+        }
+
+        .mission-box {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .mission-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .mission-list li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            background: #ffffff;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 4px solid #ff9800;
+        }
+
+        .mission-list li::before {
+            content: "🎯";
+            position: absolute;
+            left: 8px;
+        }
+
+        .prep-section {
+            background: #f3e5f5;
+            border: 2px solid #9c27b0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .input-box {
+            background: #ffffff;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 8px;
+            margin: 5px 0;
+            width: calc(100% - 20px);
+            font-size: 14px;
+            color: #333;
+        }
+
+        .input-box:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 3px solid #007acc;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block::before {
+            content: "💻 Python Code";
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #007acc;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+        }
+
+        /* Python 문법 하이라이팅 */
+        .code-block .keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-block .function {
+            color: #dcdcaa;
+        }
+
+        .code-block .number {
+            color: #b5cea8;
+        }
+
+        .analysis-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .question-section {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .textarea {
+            width: calc(100% - 20px);
+            min-height: 80px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .completion-check {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 12px;
+            background: #f0f8ff;
+            border: 1px solid #87ceeb;
+            border-radius: 8px;
+        }
+
+        .completion-check input[type="checkbox"] {
+            margin-right: 15px;
+            transform: scale(1.3);
+            accent-color: #3498db;
+        }
+
+        .completion-check label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .final-section {
+            background: #fce4ec;
+            border: 2px solid #e91e63;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .score-input {
+            display: inline-block;
+            width: 60px;
+            padding: 8px;
+            margin: 0 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .score-input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        /* 우클릭, 드래그 방지 */
+        .no-context {
+            pointer-events: none;
+        }
+
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .code-block {
+                font-size: 12px;
+                padding: 15px;
+            }
+        }
+
+        /* 인쇄 방지 */
+        @media print {
+            body {
+                display: none;
+            }
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid #ffeaa7;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        /* 라디오 버튼 스타일 */
+        input[type="radio"] {
+            margin: 0 8px 0 20px;
+            transform: scale(1.2);
+            accent-color: #3498db;
+        }
+
+        label {
+            font-weight: 500;
+        }
+
+        /* 코드 블록 내 특정 요소 스타일 */
+        .code-line {
+            margin: 2px 0;
+        }
+
+        .code-indent {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+    
+    <div class="container">
+        <h1>📝 Week 8 학생용 워크시트</h1>
+        
+        <div class="header-info">
+            <h2>실전 프로젝트: 우리 동네 날씨 데이터 시각화</h2>
+            <p><strong>이름:</strong> <input type="text" class="input-box" placeholder="여기에 이름을 입력하세요" style="width: 200px; display: inline-block;"> 
+            <strong style="margin-left: 30px;">날짜:</strong> <input type="text" class="input-box" placeholder="오늘 날짜를 입력하세요" style="width: 200px; display: inline-block;"></p>
+        </div>
+
+        <div class="mission-box">
+            <h2>🌤️ 프로젝트 개요</h2>
+            <p>오늘은 지금까지 배운 모든 기법을 활용해서 진짜 데이터 분석가가 되어볼 거예요!<br>
+            우리 동네의 날씨 데이터를 시각화하면서 숨겨진 패턴들을 발견해봅시다.</p>
+            
+            <h3>🎯 오늘의 미션:</h3>
+            <ul class="mission-list">
+                <li>날씨 데이터 분석가가 되어 1월 한 달간 날씨 분석하기</li>
+                <li>다양한 그래프로 날씨 패턴 시각화하기</li>
+                <li>기후 변화와 일상생활의 연관성 찾아보기</li>
+                <li>전문가 수준의 날씨 대시보드 완성하기</li>
+            </ul>
+        </div>
+
+        <div class="prep-section">
+            <h2>🤔 프로젝트 준비</h2>
+            
+            <h3>1. 지금까지 배운 그래프 기법들을 정리해보세요:</h3>
+            <div class="question-section">
+                <p><strong>• 선 그래프:</strong> <input type="text" class="input-box" placeholder="어떤 용도로 사용하나요?" style="width: 300px; display: inline-block;"> 에 사용</p>
+                <p><strong>• 막대 그래프:</strong> <input type="text" class="input-box" placeholder="어떤 용도로 사용하나요?" style="width: 300px; display: inline-block;"> 에 사용</p>
+                <p><strong>• 원 그래프:</strong> <input type="text" class="input-box" placeholder="어떤 용도로 사용하나요?" style="width: 300px; display: inline-block;"> 에 사용</p>
+                <p><strong>• 히스토그램:</strong> <input type="text" class="input-box" placeholder="어떤 용도로 사용하나요?" style="width: 300px; display: inline-block;"> 에 사용</p>
+            </div>
+
+            <h3>2. 날씨 데이터로 어떤 분석을 해보고 싶나요?</h3>
+            <div class="question-section">
+                <p><strong>내 관심사:</strong></p>
+                <textarea class="textarea" placeholder="날씨에 대해 궁금한 점들을 적어보세요"></textarea>
+                
+                <p><strong>궁금한 점:</strong></p>
+                <textarea class="textarea" placeholder="분석을 통해 알고 싶은 것들을 적어보세요"></textarea>
+            </div>
+
+            <h3>3. 기상캐스터가 되었다고 상상해보세요. 어떤 그래프가 필요할까요?</h3>
+            <div class="question-section">
+                <p><strong>• 온도 변화:</strong> <input type="text" class="input-box" placeholder="적합한 그래프는?" style="width: 200px; display: inline-block;"> 그래프가 적합</p>
+                <p><strong>• 강수량 분포:</strong> <input type="text" class="input-box" placeholder="적합한 그래프는?" style="width: 200px; display: inline-block;"> 그래프가 적합</p>
+                <p><strong>• 날씨 종류 비율:</strong> <input type="text" class="input-box" placeholder="적합한 그래프는?" style="width: 200px; display: inline-block;"> 그래프가 적합</p>
+            </div>
+        </div>
+
+        <div class="analysis-box">
+            <h2>📊 데이터 준비 및 탐색</h2>
+            
+            <h3>Step 1: 데이터 생성 및 이해</h3>
+            <div class="code-block">
+<div class="code-line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</div>
+<div class="code-line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div>
+<div class="code-line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div>
+<div class="code-line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 한글 폰트 설정</span></div>
+<div class="code-line">plt.rcParams[<span class="string">'font.family'</span>] = <span class="string">'DejaVu Sans'</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 🌡️ 1월 날씨 데이터 준비 ==="</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 1월 한 달간 날씨 데이터 생성 (실제와 유사하게)</span></div>
+<div class="code-line">np.random.<span class="function">seed</span>(<span class="number">42</span>)  <span class="comment"># 같은 결과를 위해</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 날짜 생성</span></div>
+<div class="code-line">dates = pd.<span class="function">date_range</span>(<span class="string">'2024-01-01'</span>, periods=<span class="number">31</span>, freq=<span class="string">'D'</span>)</div>
+<div class="code-line">date_labels = [<span class="string">f"{d.month}/{d.day}"</span> <span class="keyword">for</span> d <span class="keyword">in</span> dates]</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 겨울 날씨 특성을 반영한 데이터 생성</span></div>
+<div class="code-line">base_temp = <span class="number">-2</span>  <span class="comment"># 1월 평균 기온</span></div>
+<div class="code-line">temperatures = base_temp + np.random.<span class="function">normal</span>(<span class="number">0</span>, <span class="number">5</span>, <span class="number">31</span>)</div>
+<div class="code-line">temperatures = np.<span class="function">clip</span>(temperatures, <span class="number">-15</span>, <span class="number">10</span>)</div>
+<div class="code-line"></div>
+<div class="code-line">humidity = np.random.<span class="function">normal</span>(<span class="number">65</span>, <span class="number">10</span>, <span class="number">31</span>)</div>
+<div class="code-line">humidity = np.<span class="function">clip</span>(humidity, <span class="number">30</span>, <span class="number">90</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 강수량 (눈 포함)</span></div>
+<div class="code-line">rainfall = np.random.<span class="function">exponential</span>(<span class="number">1.5</span>, <span class="number">31</span>)</div>
+<div class="code-line">rainfall = np.<span class="function">where</span>(np.random.<span class="function">random</span>(<span class="number">31</span>) &lt; <span class="number">0.7</span>, <span class="number">0</span>, rainfall)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 풍속</span></div>
+<div class="code-line">wind_speed = np.random.<span class="function">normal</span>(<span class="number">8</span>, <span class="number">3</span>, <span class="number">31</span>)</div>
+<div class="code-line">wind_speed = np.<span class="function">clip</span>(wind_speed, <span class="number">0</span>, <span class="number">20</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 데이터 미리보기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"📅 분석 기간: {dates[0].strftime('%Y-%m-%d')} ~ {dates[-1].strftime('%Y-%m-%d')}"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"🌡️ 평균 기온: {np.mean(temperatures):.1f}°C"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"💧 평균 습도: {np.mean(humidity):.1f}%"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"🌧️ 강수일수: {np.sum(rainfall > 0)}일"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"💨 평균 풍속: {np.mean(wind_speed):.1f}m/s"</span>)</div>
+            </div>
+
+            <div class="question-section">
+                <h4>데이터 첫인상:</h4>
+                <p><strong>• 예상보다 추웠나요, 따뜻했나요?</strong> <input type="text" class="input-box" placeholder="첫인상을 적어보세요" style="width: 300px; display: inline-block;"></p>
+                <p><strong>• 비/눈이 많이 왔나요?</strong> <input type="text" class="input-box" placeholder="강수량에 대한 생각을 적어보세요" style="width: 300px; display: inline-block;"></p>
+                <p><strong>• 가장 궁금한 패턴은?</strong> <input type="text" class="input-box" placeholder="더 자세히 알고 싶은 것은?" style="width: 300px; display: inline-block;"></p>
+            </div>
+        </div>
+
+        <div class="analysis-box">
+            <h3>Step 2: 기본 통계 분석</h3>
+            <div class="code-block">
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 📈 기본 통계 분석 ==="</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 온도 통계</span></div>
+<div class="code-line">temp_stats = {</div>
+<div class="code-line code-indent"><span class="string">'평균 기온'</span>: np.<span class="function">mean</span>(temperatures),</div>
+<div class="code-line code-indent"><span class="string">'최고 기온'</span>: np.<span class="function">max</span>(temperatures),</div>
+<div class="code-line code-indent"><span class="string">'최저 기온'</span>: np.<span class="function">min</span>(temperatures),</div>
+<div class="code-line code-indent"><span class="string">'기온 범위'</span>: np.<span class="function">max</span>(temperatures) - np.<span class="function">min</span>(temperatures),</div>
+<div class="code-line code-indent"><span class="string">'표준편차'</span>: np.<span class="function">std</span>(temperatures)</div>
+<div class="code-line">}</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"🌡️ 온도 분석:"</span>)</div>
+<div class="code-line"><span class="keyword">for</span> key, value <span class="keyword">in</span> temp_stats.<span class="function">items</span>():</div>
+<div class="code-line code-indent"><span class="function">print</span>(<span class="string">f"   {key}: {value:.1f}°C"</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 강수량 통계</span></div>
+<div class="code-line">rain_days = np.<span class="function">sum</span>(rainfall &gt; <span class="number">0</span>)</div>
+<div class="code-line">total_rainfall = np.<span class="function">sum</span>(rainfall)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"\n🌧️ 강수량 분석:"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"   강수일수: {rain_days}일"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"   총 강수량: {total_rainfall:.1f}mm"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"   평균 강수량 (강수일만): {total_rainfall/rain_days if rain_days > 0 else 0:.1f}mm"</span>)</div>
+            </div>
+
+            <div class="question-section">
+                <h4>기본 분석 결과:</h4>
+                <p><strong>• 가장 추웠던 날:</strong> <input type="text" class="input-box" placeholder="월" style="width: 50px; display: inline-block;"> 월 <input type="text" class="input-box" placeholder="일" style="width: 50px; display: inline-block;"> 일 (<input type="text" class="input-box" placeholder="온도" style="width: 80px; display: inline-block;"> °C)</p>
+                <p><strong>• 가장 따뜻했던 날:</strong> <input type="text" class="input-box" placeholder="월" style="width: 50px; display: inline-block;"> 월 <input type="text" class="input-box" placeholder="일" style="width: 50px; display: inline-block;"> 일 (<input type="text" class="input-box" placeholder="온도" style="width: 80px; display: inline-block;"> °C)</p>
+                <p><strong>• 비/눈이 가장 많이 온 날:</strong> <input type="text" class="input-box" placeholder="월" style="width: 50px; display: inline-block;"> 월 <input type="text" class="input-box" placeholder="일" style="width: 50px; display: inline-block;"> 일 (<input type="text" class="input-box" placeholder="강수량" style="width: 80px; display: inline-block;"> mm)</p>
+                <p><strong>• 바람이 가장 강했던 날:</strong> <input type="text" class="input-box" placeholder="월" style="width: 50px; display: inline-block;"> 월 <input type="text" class="input-box" placeholder="일" style="width: 50px; display: inline-block;"> 일 (<input type="text" class="input-box" placeholder="풍속" style="width: 80px; display: inline-block;"> m/s)</p>
+            </div>
+        </div>
+
+        <div class="mission-box">
+            <h2>📈 종합 시각화 대시보드</h2>
+            
+            <h3>미션 1: 기온 변화 추이 분석</h3>
+            <div class="code-block">
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 🌡️ 미션 1: 기온 변화 마스터 ==="</span>)</div>
+<div class="code-line"></div>
+<div class="code-line">plt.style.<span class="function">use</span>(<span class="string">'seaborn-v0_8'</span>)  <span class="comment"># 전문적인 스타일 적용</span></div>
+<div class="code-line">fig, axes = plt.<span class="function">subplots</span>(<span class="number">2</span>, <span class="number">2</span>, figsize=(<span class="number">16</span>, <span class="number">12</span>))</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 1. 일별 기온 변화 (메인 그래프)</span></div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">plot</span>(date_labels, temperatures,</div>
+<div class="code-line code-indent">marker=<span class="string">'o'</span>, linewidth=<span class="number">2</span>, markersize=<span class="number">4</span>, color=<span class="string">'#e74c3c'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">axhline</span>(y=<span class="number">0</span>, color=<span class="string">'blue'</span>, linestyle=<span class="string">'--'</span>, alpha=<span class="number">0.7</span>, label=<span class="string">'빙점 (0°C)'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">fill_between</span>(date_labels, temperatures, <span class="number">0</span>,</div>
+<div class="code-line code-indent">alpha=<span class="number">0.3</span>, color=<span class="string">'lightcoral'</span>, where=(np.<span class="function">array</span>(temperatures) &gt; <span class="number">0</span>))</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">fill_between</span>(date_labels, temperatures, <span class="number">0</span>,</div>
+<div class="code-line code-indent">alpha=<span class="number">0.3</span>, color=<span class="string">'lightblue'</span>, where=(np.<span class="function">array</span>(temperatures) &lt;= <span class="number">0</span>))</div>
+<div class="code-line"></div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">set_title</span>(<span class="string">'1월 일별 기온 변화'</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">'bold'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">set_xlabel</span>(<span class="string">'날짜'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">set_ylabel</span>(<span class="string">'기온 (°C)'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">legend</span>()</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">grid</span>(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">tick_params</span>(axis=<span class="string">'x'</span>, rotation=<span class="number">45</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 2. 기온 분포 (히스토그램)</span></div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">1</span>].<span class="function">hist</span>(temperatures, bins=<span class="number">8</span>, color=<span class="string">'orange'</span>, alpha=<span class="number">0.7</span>, edgecolor=<span class="string">'darkorange'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">1</span>].<span class="function">axvline</span>(np.<span class="function">mean</span>(temperatures), color=<span class="string">'red'</span>, linestyle=<span class="string">'--'</span>,</div>
+<div class="code-line code-indent">linewidth=<span class="number">2</span>, label=<span class="string">f'평균: {np.mean(temperatures):.1f}°C'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">1</span>].<span class="function">set_title</span>(<span class="string">'기온 분포'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">1</span>].<span class="function">set_xlabel</span>(<span class="string">'기온 (°C)'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">1</span>].<span class="function">set_ylabel</span>(<span class="string">'일수'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">1</span>].<span class="function">legend</span>()</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">1</span>].<span class="function">grid</span>(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 3. 주간별 평균 기온</span></div>
+<div class="code-line">week_temps = []</div>
+<div class="code-line">weeks = [<span class="string">'1주'</span>, <span class="string">'2주'</span>, <span class="string">'3주'</span>, <span class="string">'4주'</span>, <span class="string">'5주'</span>]</div>
+<div class="code-line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):</div>
+<div class="code-line code-indent">start_idx = i * <span class="number">7</span></div>
+<div class="code-line code-indent">end_idx = <span class="function">min</span>((i + <span class="number">1</span>) * <span class="number">7</span>, <span class="function">len</span>(temperatures))</div>
+<div class="code-line code-indent"><span class="keyword">if</span> start_idx &lt; <span class="function">len</span>(temperatures):</div>
+<div class="code-line code-indent code-indent">week_avg = np.<span class="function">mean</span>(temperatures[start_idx:end_idx])</div>
+<div class="code-line code-indent code-indent">week_temps.<span class="function">append</span>(week_avg)</div>
+<div class="code-line code-indent"><span class="keyword">else</span>:</div>
+<div class="code-line code-indent code-indent">week_temps.<span class="function">append</span>(<span class="number">0</span>)</div>
+<div class="code-line"></div>
+<div class="code-line">week_temps = [temp <span class="keyword">for</span> temp <span class="keyword">in</span> week_temps <span class="keyword">if</span> temp != <span class="number">0</span>]</div>
+<div class="code-line">week_labels = weeks[:<span class="function">len</span>(week_temps)]</div>
+<div class="code-line"></div>
+<div class="code-line">colors = [<span class="string">'#ff6b6b'</span>, <span class="string">'#4ecdc4'</span>, <span class="string">'#45b7d1'</span>, <span class="string">'#96ceb4'</span>, <span class="string">'#ffeaa7'</span>]</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">bar</span>(week_labels, week_temps, color=colors[:<span class="function">len</span>(week_temps)], alpha=<span class="number">0.8</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">set_title</span>(<span class="string">'주간별 평균 기온'</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">set_ylabel</span>(<span class="string">'평균 기온 (°C)'</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">grid</span>(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 4. 영하 vs 영상 일수</span></div>
+<div class="code-line">below_zero = np.<span class="function">sum</span>(temperatures &lt; <span class="number">0</span>)</div>
+<div class="code-line">above_zero = np.<span class="function">sum</span>(temperatures &gt;= <span class="number">0</span>)</div>
+<div class="code-line"></div>
+<div class="code-line">labels = [<span class="string">'영하 일수'</span>, <span class="string">'영상 일수'</span>]</div>
+<div class="code-line">sizes = [below_zero, above_zero]</div>
+<div class="code-line">colors_pie = [<span class="string">'lightblue'</span>, <span class="string">'lightcoral'</span>]</div>
+<div class="code-line">explode = [<span class="number">0.1</span>, <span class="number">0</span>]  <span class="comment"># 영하 일수 강조</span></div>
+<div class="code-line"></div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">1</span>].<span class="function">pie</span>(sizes, explode=explode, labels=labels, colors=colors_pie,</div>
+<div class="code-line code-indent">autopct=<span class="string">'%1.1f%%'</span>, shadow=<span class="keyword">True</span>, startangle=<span class="number">90</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">1</span>].<span class="function">set_title</span>(<span class="string">'영하 vs 영상 일수 비율'</span>)</div>
+<div class="code-line"></div>
+<div class="code-line">plt.<span class="function">tight_layout</span>()</div>
+<div class="code-line">plt.<span class="function">show</span>()</div>
+            </div>
+
+            <div class="question-section">
+                <h4>기온 분석 결과:</h4>
+                <p><strong>• 가장 추웠던 주:</strong> <input type="text" class="input-box" placeholder="몇 주?" style="width: 80px; display: inline-block;"> 주 (평균 <input type="text" class="input-box" placeholder="온도" style="width: 80px; display: inline-block;"> °C)</p>
+                <p><strong>• 영하 일수:</strong> <input type="text" class="input-box" placeholder="일수" style="width: 80px; display: inline-block;"> 일 (<input type="text" class="input-box" placeholder="퍼센트" style="width: 80px; display: inline-block;"> %)</p>
+                <p><strong>• 기온 변화 패턴의 특징:</strong> <input type="text" class="input-box" placeholder="패턴을 설명해보세요" style="width: 400px; display: inline-block;"></p>
+            </div>
+        </div>
+
+        <div class="analysis-box">
+            <h3>미션 2: 강수량과 습도 분석</h3>
+            <div class="code-block">
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 🌧️ 미션 2: 강수량과 습도 패턴 분석 ==="</span>)</div>
+<div class="code-line"></div>
+<div class="code-line">fig, axes = plt.<span class="function">subplots</span>(<span class="number">2</span>, <span class="number">2</span>, figsize=(<span class="number">16</span>, <span class="number">10</span>))</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 1. 일별 강수량 (막대그래프)</span></div>
+<div class="code-line">rain_colors = [<span class="string">'darkblue'</span> <span class="keyword">if</span> r &gt; <span class="number">0</span> <span class="keyword">else</span> <span class="string">'lightgray'</span> <span class="keyword">for</span> r <span class="keyword">in</span> rainfall]</div>
+<div class="code-line">bars = axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">bar</span>(date_labels, rainfall, color=rain_colors, alpha=<span class="number">0.7</span>)</div>
+<div class="code-line"></div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">set_title</span>(<span class="string">'1월 일별 강수량'</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">'bold'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">set_xlabel</span>(<span class="string">'날짜'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">set_ylabel</span>(<span class="string">'강수량 (mm)'</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">tick_params</span>(axis=<span class="string">'x'</span>, rotation=<span class="number">45</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">0</span>].<span class="function">grid</span>(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 2. 강수일 vs 맑은 날 비율</span></div>
+<div class="code-line">rainy_days = np.<span class="function">sum</span>(rainfall &gt; <span class="number">0</span>)</div>
+<div class="code-line">clear_days = <span class="number">31</span> - rainy_days</div>
+<div class="code-line"></div>
+<div class="code-line">pie_labels = [<span class="string">'강수일'</span>, <span class="string">'맑은 날'</span>]</div>
+<div class="code-line">pie_sizes = [rainy_days, clear_days]</div>
+<div class="code-line">pie_colors = [<span class="string">'lightblue'</span>, <span class="string">'gold'</span>]</div>
+<div class="code-line"></div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">1</span>].<span class="function">pie</span>(pie_sizes, labels=pie_labels, colors=pie_colors,</div>
+<div class="code-line code-indent">autopct=<span class="string">'%1.1f%%'</span>, startangle=<span class="number">90</span>, shadow=<span class="keyword">True</span>)</div>
+<div class="code-line">axes[<span class="number">0</span>, <span class="number">1</span>].<span class="function">set_title</span>(<span class="string">'강수일 vs 맑은 날 비율'</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 3. 습도 변화 추이</span></div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">plot</span>(date_labels, humidity, <span class="string">'g-'</span>, linewidth=<span class="number">2</span>, alpha=<span class="number">0.8</span>, label=<span class="string">'습도'</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">fill_between</span>(date_labels, humidity, alpha=<span class="number">0.2</span>, color=<span class="string">'green'</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">axhline</span>(y=<span class="number">60</span>, color=<span class="string">'orange'</span>, linestyle=<span class="string">'--'</span>, alpha=<span class="number">0.7</span>, label=<span class="string">'쾌적 습도 (60%)'</span>)</div>
+<div class="code-line"></div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">set_title</span>(<span class="string">'1월 습도 변화'</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">set_xlabel</span>(<span class="string">'날짜'</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">set_ylabel</span>(<span class="string">'습도 (%)'</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">legend</span>()</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">grid</span>(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">0</span>].<span class="function">tick_params</span>(axis=<span class="string">'x'</span>, rotation=<span class="number">45</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 4. 습도 구간별 분포</span></div>
+<div class="code-line">humidity_ranges = [<span class="string">'30-40%'</span>, <span class="string">'40-50%'</span>, <span class="string">'50-60%'</span>, <span class="string">'60-70%'</span>, <span class="string">'70-80%'</span>, <span class="string">'80-90%'</span>]</div>
+<div class="code-line">range_counts = [</div>
+<div class="code-line code-indent">np.<span class="function">sum</span>((humidity &gt;= <span class="number">30</span>) &amp; (humidity &lt; <span class="number">40</span>)),</div>
+<div class="code-line code-indent">np.<span class="function">sum</span>((humidity &gt;= <span class="number">40</span>) &amp; (humidity &lt; <span class="number">50</span>)),</div>
+<div class="code-line code-indent">np.<span class="function">sum</span>((humidity &gt;= <span class="number">50</span>) &amp; (humidity &lt; <span class="number">60</span>)),</div>
+<div class="code-line code-indent">np.<span class="function">sum</span>((humidity &gt;= <span class="number">60</span>) &amp; (humidity &lt; <span class="number">70</span>)),</div>
+<div class="code-line code-indent">np.<span class="function">sum</span>((humidity &gt;= <span class="number">70</span>) &amp; (humidity &lt; <span class="number">80</span>)),</div>
+<div class="code-line code-indent">np.<span class="function">sum</span>((humidity &gt;= <span class="number">80</span>) &amp; (humidity &lt; <span class="number">90</span>))</div>
+<div class="code-line">]</div>
+<div class="code-line"></div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">1</span>].<span class="function">barh</span>(humidity_ranges, range_counts, color=<span class="string">'lightcyan'</span>, alpha=<span class="number">0.8</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">1</span>].<span class="function">set_title</span>(<span class="string">'습도 구간별 일수'</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">1</span>].<span class="function">set_xlabel</span>(<span class="string">'일수'</span>)</div>
+<div class="code-line">axes[<span class="number">1</span>, <span class="number">1</span>].<span class="function">grid</span>(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)</div>
+<div class="code-line"></div>
+<div class="code-line">plt.<span class="function">tight_layout</span>()</div>
+<div class="code-line">plt.<span class="function">show</span>()</div>
+            </div>
+
+            <div class="question-section">
+                <h4>강수량/습도 분석 결과:</h4>
+                <p><strong>• 총 강수일:</strong> <input type="text" class="input-box" placeholder="일수" style="width: 80px; display: inline-block;"> 일</p>
+                <p><strong>• 가장 많은 비가 온 날:</strong> <input type="text" class="input-box" placeholder="월" style="width: 50px; display: inline-block;"> 월 <input type="text" class="input-box" placeholder="일" style="width: 50px; display: inline-block;"> 일 (<input type="text" class="input-box" placeholder="강수량" style="width: 80px; display: inline-block;"> mm)</p>
+                <p><strong>• 평균 습도:</strong> <input type="text" class="input-box" placeholder="습도" style="width: 80px; display: inline-block;"> % 
+                (<input type="radio" name="humidity-level" id="dry"> <label for="dry">건조함</label>
+                <input type="radio" name="humidity-level" id="moderate"> <label for="moderate">적당함</label>
+                <input type="radio" name="humidity-level" id="humid"> <label for="humid">습함</label>)</p>
+                <p><strong>• 가장 흔한 습도 구간:</strong> <input type="text" class="input-box" placeholder="습도 구간" style="width: 150px; display: inline-block;"></p>
+            </div>
+        </div>
+
+        <div class="prep-section">
+            <h2>🔍 데이터 인사이트 발굴</h2>
+            
+            <h3>분석 보고서 작성</h3>
+            
+            <div class="question-section">
+                <h4>1. 1월 날씨의 전반적 특징 (3가지)</h4>
+                <p><strong>1)</strong> <textarea class="textarea" placeholder="첫 번째 특징을 설명해보세요"></textarea></p>
+                <p><strong>2)</strong> <textarea class="textarea" placeholder="두 번째 특징을 설명해보세요"></textarea></p>
+                <p><strong>3)</strong> <textarea class="textarea" placeholder="세 번째 특징을 설명해보세요"></textarea></p>
+            </div>
+
+            <div class="question-section">
+                <h4>2. 가장 흥미로운 발견</h4>
+                <p><strong>발견한 패턴:</strong></p>
+                <textarea class="textarea" placeholder="어떤 패턴을 발견했나요?"></textarea>
+                
+                <p><strong>왜 흥미로웠는지:</strong></p>
+                <textarea class="textarea" placeholder="이 패턴이 왜 흥미로웠나요?"></textarea>
+            </div>
+
+            <div class="question-section">
+                <h4>3. 예상과 다른 결과</h4>
+                <p><strong>예상했던 것:</strong></p>
+                <textarea class="textarea" placeholder="처음에 어떻게 예상했나요?"></textarea>
+                
+                <p><strong>실제 결과:</strong></p>
+                <textarea class="textarea" placeholder="실제로는 어땠나요?"></textarea>
+                
+                <p><strong>차이가 난 이유 추측:</strong></p>
+                <textarea class="textarea" placeholder="왜 차이가 났을까요?"></textarea>
+            </div>
+
+            <div class="question-section">
+                <h4>4. 날씨 요소들 간의 관계</h4>
+                <p><strong>기온과 습도:</strong></p>
+                <textarea class="textarea" placeholder="기온과 습도 사이에 어떤 관계를 발견했나요?"></textarea>
+                
+                <p><strong>강수량과 다른 요소들:</strong></p>
+                <textarea class="textarea" placeholder="강수량이 다른 날씨 요소들과 어떤 관계가 있나요?"></textarea>
+                
+                <p><strong>가장 강한 상관관계:</strong></p>
+                <textarea class="textarea" placeholder="어떤 요소들이 가장 밀접한 관계를 보였나요?"></textarea>
+            </div>
+
+            <div class="question-section">
+                <h4>5. 일상생활에 미친 영향</h4>
+                <p><strong>추운 날이 많아서:</strong></p>
+                <textarea class="textarea" placeholder="추운 날씨가 일상생활에 어떤 영향을 미쳤나요?"></textarea>
+                
+                <p><strong>비/눈이 와서:</strong></p>
+                <textarea class="textarea" placeholder="강수일이 일상생활에 어떤 영향을 미쳤나요?"></textarea>
+                
+                <p><strong>바람이 강해서:</strong></p>
+                <textarea class="textarea" placeholder="강한 바람이 일상생활에 어떤 영향을 미쳤나요?"></textarea>
+            </div>
+        </div>
+
+        <div class="mission-box">
+            <h2>🏆 최종 성과 정리</h2>
+            
+            <h3>프로젝트 완성도 체크</h3>
+            
+            <div class="question-section">
+                <h4>사용한 시각화 기법들 (체크해보세요)</h4>
+                <div class="completion-check">
+                    <input type="checkbox" id="line-graph"> <label for="line-graph">선 그래프 (시계열 데이터)</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="bar-graph"> <label for="bar-graph">막대 그래프 (카테고리별 비교)</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="histogram"> <label for="histogram">히스토그램 (분포 확인)</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="scatter"> <label for="scatter">산점도 (상관관계)</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="pie-chart"> <label for="pie-chart">원그래프 (비율 표시)</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="subplot"> <label for="subplot">서브플롯 (여러 그래프 조합)</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="color-mapping"> <label for="color-mapping">색상 매핑 (추가 정보 표현)</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="styling"> <label for="styling">투명도와 스타일링</label>
+                </div>
+            </div>
+
+            <div class="question-section">
+                <h4>데이터 분석 기법들</h4>
+                <div class="completion-check">
+                    <input type="checkbox" id="basic-stats"> <label for="basic-stats">기초 통계 (평균, 최대, 최소)</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="correlation"> <label for="correlation">상관관계 분석</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="filtering"> <label for="filtering">조건부 필터링</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="grouping"> <label for="grouping">그룹별 분석</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="time-series"> <label for="time-series">시계열 패턴 파악</label>
+                </div>
+            </div>
+
+            <div class="question-section">
+                <h4>전문성 평가</h4>
+                <p><strong>• 그래프 가독성:</strong> <input type="number" class="score-input" min="1" max="10" placeholder="점수"> /10점</p>
+                <p><strong>• 정보 전달력:</strong> <input type="number" class="score-input" min="1" max="10" placeholder="점수"> /10점</p>
+                <p><strong>• 창의성:</strong> <input type="number" class="score-input" min="1" max="10" placeholder="점수"> /10점</p>
+                <p><strong>• 완성도:</strong> <input type="number" class="score-input" min="1" max="10" placeholder="점수"> /10점</p>
+            </div>
+        </div>
+
+        <div class="analysis-box">
+            <h2>💭 프로젝트 성찰</h2>
+            
+            <div class="question-section">
+                <h4>1. 오늘 프로젝트의 만족도 (1~10점): <input type="number" class="score-input" min="1" max="10" placeholder="점수"> 점</h4>
+                
+                <h4>2. 가장 뿌듯했던 순간</h4>
+                <textarea class="textarea" placeholder="어떤 순간이 가장 뿌듯했나요?"></textarea>
+                
+                <h4>3. 가장 어려웠던 부분</h4>
+                <textarea class="textarea" placeholder="어떤 부분이 가장 어려웠나요?"></textarea>
+                
+                <h4>4. 친구에게 이 프로젝트를 추천한다면?</h4>
+                <p>
+                    <input type="radio" name="recommend" id="strongly-yes"> <label for="strongly-yes">강력 추천!</label>
+                    <input type="radio" name="recommend" id="yes"> <label for="yes">추천</label>
+                    <input type="radio" name="recommend" id="neutral"> <label for="neutral">보통</label>
+                    <input type="radio" name="recommend" id="no"> <label for="no">비추천</label>
+                </p>
+                <p><strong>이유:</strong> <input type="text" class="input-box" placeholder="추천하는 이유를 적어보세요" style="width: 400px; display: inline-block;"></p>
+                
+                <h4>5. 데이터 과학자에 대한 생각이 바뀌었나요?</h4>
+                <p><strong>프로젝트 전 생각:</strong></p>
+                <textarea class="textarea" placeholder="프로젝트 하기 전에는 어떻게 생각했나요?"></textarea>
+                
+                <p><strong>프로젝트 후 생각:</strong></p>
+                <textarea class="textarea" placeholder="프로젝트를 한 후에는 어떻게 생각하나요?"></textarea>
+                
+                <h4>6. 다음에 도전하고 싶은 데이터 프로젝트</h4>
+                <textarea class="textarea" placeholder="어떤 데이터를 분석해보고 싶나요?"></textarea>
+            </div>
+        </div>
+
+        <div class="analysis-box">
+            <h2>🌟 창의적 확장 분석</h2>
+            
+            <h3>보너스 미션: 특별 분석</h3>
+            
+            <div class="question-section">
+                <h4>미션 A: 날씨 예측가 되기</h4>
+                <div class="code-block">
+<div class="code-line"><span class="comment"># 간단한 날씨 패턴 예측</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 🔮 날씨 예측가 도전 ==="</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 최근 3일 평균으로 다음 날 예측</span></div>
+<div class="code-line"><span class="keyword">def</span> <span class="function">simple_weather_forecast</span>(data, window=<span class="number">3</span>):</div>
+<div class="code-line code-indent">forecasts = []</div>
+<div class="code-line code-indent"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(window, <span class="function">len</span>(data)):</div>
+<div class="code-line code-indent code-indent">recent_avg = np.<span class="function">mean</span>(data[i-window:i])</div>
+<div class="code-line code-indent code-indent">actual = data[i]</div>
+<div class="code-line code-indent code-indent">forecasts.<span class="function">append</span>((recent_avg, actual))</div>
+<div class="code-line code-indent"><span class="keyword">return</span> forecasts</div>
+<div class="code-line"></div>
+<div class="code-line">temp_forecasts = <span class="function">simple_weather_forecast</span>(temperatures)</div>
+<div class="code-line"></div>
+<div class="code-line">plt.<span class="function">figure</span>(figsize=(<span class="number">12</span>, <span class="number">6</span>))</div>
+<div class="code-line">recent_avgs = [f[<span class="number">0</span>] <span class="keyword">for</span> f <span class="keyword">in</span> temp_forecasts[<span class="number">-10</span>:]]</div>
+<div class="code-line">actual_temps = [f[<span class="number">1</span>] <span class="keyword">for</span> f <span class="keyword">in</span> temp_forecasts[<span class="number">-10</span>:]]</div>
+<div class="code-line">days_forecast = <span class="function">range</span>(<span class="function">len</span>(recent_avgs))</div>
+<div class="code-line"></div>
+<div class="code-line">plt.<span class="function">plot</span>(days_forecast, recent_avgs, <span class="string">'b--'</span>, label=<span class="string">'3일 평균 예측'</span>, linewidth=<span class="number">2</span>)</div>
+<div class="code-line">plt.<span class="function">plot</span>(days_forecast, actual_temps, <span class="string">'ro-'</span>, label=<span class="string">'실제 기온'</span>, linewidth=<span class="number">2</span>)</div>
+<div class="code-line"></div>
+<div class="code-line">plt.<span class="function">title</span>(<span class="string">'간단한 기온 예측 vs 실제'</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">'bold'</span>)</div>
+<div class="code-line">plt.<span class="function">xlabel</span>(<span class="string">'날짜 (마지막 10일)'</span>)</div>
+<div class="code-line">plt.<span class="function">ylabel</span>(<span class="string">'기온 (°C)'</span>)</div>
+<div class="code-line">plt.<span class="function">legend</span>()</div>
+<div class="code-line">plt.<span class="function">grid</span>(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)</div>
+<div class="code-line">plt.<span class="function">show</span>()</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 예측 정확도 계산</span></div>
+<div class="code-line">errors = [<span class="function">abs</span>(pred - actual) <span class="keyword">for</span> pred, actual <span class="keyword">in</span> temp_forecasts]</div>
+<div class="code-line">avg_error = np.<span class="function">mean</span>(errors)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"📊 평균 예측 오차: {avg_error:.1f}°C"</span>)</div>
+                </div>
+
+                <p><strong>예측 결과:</strong></p>
+                <p>• 평균 예측 오차: <input type="text" class="input-box" placeholder="°C" style="width: 80px; display: inline-block;"> °C</p>
+                <p>• 예측 정확도: 
+                <input type="radio" name="prediction-accuracy" id="excellent"> <label for="excellent">우수</label>
+                <input type="radio" name="prediction-accuracy" id="good"> <label for="good">양호</label>
+                <input type="radio" name="prediction-accuracy" id="needs-improvement"> <label for="needs-improvement">개선 필요</label></p>
+                <p>• 예측이 가장 어려웠던 날: <input type="text" class="input-box" placeholder="날짜와 이유를 적어보세요" style="width: 350px; display: inline-block;"></p>
+            </div>
+
+            <div class="question-section">
+                <h4>미션 B: 날씨와 기분의 관계</h4>
+                <div class="code-block">
+<div class="code-line"><span class="comment"># 가상의 기분 데이터 (실제로는 본인이 입력)</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 😊 날씨가 기분에 미치는 영향 분석 ==="</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 날씨 조건에 따른 기분 점수 시뮬레이션</span></div>
+<div class="code-line">mood_scores = []</div>
+<div class="code-line"><span class="keyword">for</span> temp, rain, wind <span class="keyword">in</span> <span class="function">zip</span>(temperatures, rainfall, wind_speed):</div>
+<div class="code-line code-indent">mood = <span class="number">50</span>  <span class="comment"># 기본 점수</span></div>
+<div class="code-line code-indent"></div>
+<div class="code-line code-indent"><span class="comment"># 기온 영향</span></div>
+<div class="code-line code-indent"><span class="keyword">if</span> <span class="number">-2</span> &lt;= temp &lt;= <span class="number">3</span>:  <span class="comment"># 적정 온도</span></div>
+<div class="code-line code-indent code-indent">mood += <span class="number">20</span></div>
+<div class="code-line code-indent"><span class="keyword">elif</span> temp &lt; <span class="number">-8</span>:  <span class="comment"># 너무 추움</span></div>
+<div class="code-line code-indent code-indent">mood -= <span class="number">15</span></div>
+<div class="code-line code-indent"><span class="keyword">elif</span> temp &gt; <span class="number">8</span>:   <span class="comment"># 상대적으로 따뜻</span></div>
+<div class="code-line code-indent code-indent">mood += <span class="number">10</span></div>
+<div class="code-line code-indent"></div>
+<div class="code-line code-indent"><span class="comment"># 강수량 영향</span></div>
+<div class="code-line code-indent"><span class="keyword">if</span> rain == <span class="number">0</span>:    <span class="comment"># 맑음</span></div>
+<div class="code-line code-indent code-indent">mood += <span class="number">15</span></div>
+<div class="code-line code-indent"><span class="keyword">elif</span> rain &gt; <span class="number">5</span>:   <span class="comment"># 많은 비/눈</span></div>
+<div class="code-line code-indent code-indent">mood -= <span class="number">20</span></div>
+<div class="code-line code-indent"></div>
+<div class="code-line code-indent"><span class="comment"># 바람 영향</span></div>
+<div class="code-line code-indent"><span class="keyword">if</span> wind &lt; <span class="number">10</span>:    <span class="comment"># 바람 적당</span></div>
+<div class="code-line code-indent code-indent">mood += <span class="number">5</span></div>
+<div class="code-line code-indent"><span class="keyword">elif</span> wind &gt; <span class="number">15</span>:  <span class="comment"># 강풍</span></div>
+<div class="code-line code-indent code-indent">mood -= <span class="number">10</span></div>
+<div class="code-line code-indent"></div>
+<div class="code-line code-indent">mood = np.<span class="function">clip</span>(mood, <span class="number">0</span>, <span class="number">100</span>)  <span class="comment"># 0-100 범위로 제한</span></div>
+<div class="code-line code-indent">mood_scores.<span class="function">append</span>(mood)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 날씨-기분 분석 그래프 생성</span></div>
+<div class="code-line">fig, axes = plt.<span class="function">subplots</span>(<span class="number">2</span>, <span class="number">2</span>, figsize=(<span class="number">15</span>, <span class="number">10</span>))</div>
+<div class="code-line">plt.<span class="function">tight_layout</span>()</div>
+<div class="code-line">plt.<span class="function">show</span>()</div>
+                </div>
+
+                <p><strong>날씨와 기분 분석:</strong></p>
+                <p>• 평균 기분 점수: <input type="text" class="input-box" placeholder="점수" style="width: 80px; display: inline-block;"> /100</p>
+                <p>• 맑은 날 vs 강수일 기분 차이: <input type="text" class="input-box" placeholder="차이" style="width: 80px; display: inline-block;"> 점</p>
+                <p>• 기온과 기분의 관계: 
+                <input type="radio" name="temp-mood-relation" id="strong"> <label for="strong">강함</label>
+                <input type="radio" name="temp-mood-relation" id="moderate"> <label for="moderate">보통</label>
+                <input type="radio" name="temp-mood-relation" id="weak"> <label for="weak">약함</label></p>
+                <p>• 가장 기분 좋았던 날의 날씨: <input type="text" class="input-box" placeholder="날씨 조건을 설명해보세요" style="width: 400px; display: inline-block;"></p>
+            </div>
+        </div>
+
+        <div class="final-section">
+            <h2>🎉 축하합니다!</h2>
+            
+            <h3>🏆 여러분은 이제 진짜 데이터 분석가입니다!</h3>
+            
+            <div class="question-section">
+                <h4>오늘 완성한 것들:</h4>
+                <div class="completion-check">
+                    <input type="checkbox" id="real-data-analysis"> <label for="real-data-analysis">✅ 실제 데이터를 활용한 종합 분석</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="professional-dashboard"> <label for="professional-dashboard">✅ 전문가 수준의 시각화 대시보드</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="meaningful-insights"> <label for="meaningful-insights">✅ 의미 있는 인사이트 발굴</label>
+                </div>
+                <div class="completion-check">
+                    <input type="checkbox" id="storytelling"> <label for="storytelling">✅ 데이터 스토리텔링 경험</label>
+                </div>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                <h4>🚀 다음 단계</h4>
+                <p style="font-size: 16px; color: #2c3e50;">
+                    다음 단계에서는 <strong>pandas</strong>라는 더욱 강력한 도구를 배워서<br>
+                    진짜 빅데이터도 다룰 수 있게 될 거예요! 🚀
+                </p>
+            </div>
+
+            <div style="margin-top: 30px; font-size: 20px; font-weight: bold; color: #e74c3c;">
+                <p>수고하셨습니다! 👏👏👏</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 복사 방지 기능 강화
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+S, Ctrl+P, F12 등 방지
+            if (e.ctrlKey && (e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 83 || e.keyCode === 80)) {
+                e.preventDefault();
+                return false;
+            }
+            // F12 (개발자 도구) 방지
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // 개발자 도구 열기 방지
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 텍스트 선택 방지
+        document.onselectstart = function() {
+            return false;
+        };
+
+        document.onmousedown = function() {
+            return false;
+        };
+
+        // 드래그 방지
+        document.ondragstart = function() {
+            return false;
+        };
+
+        // 인쇄 방지
+        window.addEventListener('beforeprint', function(e) {
+            e.preventDefault();
+            alert('이 문서는 인쇄할 수 없습니다.');
+            return false;
+        });
+
+        // 페이지 이탈시 경고
+        window.addEventListener('beforeunload', function(e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+
+        // 체크박스와 라디오 버튼의 상태 저장 (임시)
+        function saveProgress() {
+            // 로컬 스토리지 대신 메모리에만 저장
+            console.log('Progress saved in memory');
+        }
+
+        // 입력 필드에 이벤트 리스너 추가
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.addEventListener('change', saveProgress);
+                input.addEventListener('input', saveProgress);
+            });
+        });
+    </script>
+</body>
+</html>
