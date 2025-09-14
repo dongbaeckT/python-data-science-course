@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 7 - 그래프를 예쁘게 꾸미기</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8f4f0 0%, #f1ebe5 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #e8d5d3 0%, #d4c0b8 100%);
+            color: #5d4e75;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .student-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            border: 2px dashed #dee2e6;
+        }
+
+        .section {
+            margin: 40px 0;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-review {
+            background: linear-gradient(135deg, #f7e6e6 0%, #f2d5d5 100%);
+        }
+
+        .section-styling {
+            background: linear-gradient(135deg, #e6f0f7 0%, #d5e5f2 100%);
+        }
+
+        .section-advanced {
+            background: linear-gradient(135deg, #f0e6f7 0%, #e5d5f2 100%);
+        }
+
+        .section-signature {
+            background: linear-gradient(135deg, #e6f7e6 0%, #d5f2d5 100%);
+        }
+
+        .section-gallery {
+            background: linear-gradient(135deg, #f7f0e6 0%, #f2e5d5 100%);
+        }
+
+        .section-summary {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        }
+
+        .section-homework {
+            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+        }
+
+        .section-reflection {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h3 {
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            color: #2c3e50;
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+
+        .answer-box {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            min-height: 60px;
+        }
+
+        .code-block {
+            margin: 15px 0;
+        }
+
+        pre[class*="language-"] {
+            border-radius: 10px;
+            font-size: 14px;
+            margin: 10px 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            position: relative;
+        }
+
+        pre[class*="language-"]:before {
+            content: "⚠️ 코드를 직접 타이핑해보세요!";
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background: #ff6b6b;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: sans-serif;
+        }
+
+        .step {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #27ae60;
+        }
+
+        .step h4 {
+            color: #27ae60;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+
+        .analysis-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .mission-box {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .mission-box h4 {
+            color: #f57c00;
+            margin-bottom: 15px;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .color-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            border: 2px solid #ddd;
+        }
+
+        .final-project {
+            background: #e8f5e8;
+            border: 3px solid #4caf50;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .final-project h4 {
+            color: #2e7d32;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .portfolio-card {
+            background: #fff8e1;
+            border: 2px solid #ffc107;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        .reflection-card {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #9c27b0;
+        }
+
+        .satisfaction-options {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .satisfaction-option {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .satisfaction-option:hover {
+            border-color: #9c27b0;
+            background: #f3e5f5;
+        }
+
+        .satisfaction-option input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .blank {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 80px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .blank-long {
+            display: inline-block;
+            border-bottom: 2px solid #333;
+            min-width: 200px;
+            height: 25px;
+            margin: 0 5px;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #5d4e75 0%, #7a6b85 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, #4a3d5f 0%, #6b5a75 100%);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+
+            .color-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .satisfaction-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← 목차로 돌아가기</a>
+        
+        <div class="header">
+            <h1>📝 Week 7 학생용 워크시트</h1>
+            <h2>그래프를 예쁘게 꾸미기</h2>
+            <div class="student-info">
+                <strong>이름:</strong> <span class="blank"></span> 
+                <strong>날짜:</strong> <span class="blank"></span>
+            </div>
+        </div>
+
+        <div class="section section-review">
+            <h2>🤔 복습 및 준비</h2>
+            
+            <div class="question">
+                <h3>1. 지난 시간까지 배운 그래프 종류는?</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                        <strong>선그래프:</strong> plt.<span class="blank"></span>()
+                    </li>
+                    <li style="margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                        <strong>막대그래프:</strong> plt.<span class="blank"></span>()
+                    </li>
+                    <li style="margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                        <strong>원그래프:</strong> plt.<span class="blank"></span>()
+                    </li>
+                    <li style="margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                        <strong>히스토그램:</strong> plt.<span class="blank"></span>()
+                    </li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>2. 가장 기본적인 그래프 vs 전문가 그래프, 어떤 차이가 있을까요?</h3>
+                <div class="answer-box">
+                    <strong>내 생각:</strong><br><br><br><br>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>3. TV나 유튜브에서 본 멋진 그래프들의 특징은?</h3>
+                <div class="color-grid">
+                    <div class="color-item">
+                        <strong>색상:</strong><br>
+                        <span class="blank-long"></span>
+                    </div>
+                    <div class="color-item">
+                        <strong>디자인:</strong><br>
+                        <span class="blank-long"></span>
+                    </div>
+                    <div class="color-item">
+                        <strong>특별한 효과:</strong><br>
+                        <span class="blank-long"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-styling">
+            <h2>🎨 전문가 스타일 그래프 만들기</h2>
+
+            <div class="step">
+                <h4>Step 1: 스타일 테마 적용하기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+
+# 사용 가능한 스타일 확인
+print("사용 가능한 스타일:", plt.style.available)
+
+# 다양한 스타일 체험해보기
+styles_to_try = ['default', 'seaborn-v0_8', 'ggplot', 'fivethirtyeight', 'bmh']
+
+# 기본 데이터
+months = ['1월', '2월', '3월', '4월', '5월', '6월']
+sales = [120, 135, 148, 162, 178, 195]
+
+# 각 스타일로 그래프 그려보기
+fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+axes = axes.flatten()
+
+for i, style_name in enumerate(styles_to_try):
+    plt.style.use(style_name)
+    
+    axes[i].plot(months, sales, marker='o', linewidth=3, markersize=8)
+    axes[i].set_title(f'{style_name} 스타일', fontsize=14)
+    axes[i].grid(True, alpha=0.3)
+    axes[i].tick_params(axis='x', rotation=45)
+
+# 나만의 선택
+axes[5].text(0.5, 0.5, '나만의\n스타일\n선택!', 
+             ha='center', va='center', fontsize=20, 
+             transform=axes[5].transAxes)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>🎭 스타일 선택:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>내가 선택한 스타일:</strong> <span class="blank"></span></li>
+                        <li style="margin: 8px 0;"><strong>선택 이유:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>Step 2: 색상 팔레트 마스터하기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 전문가들이 사용하는 색상 조합
+color_palettes = {
+    '비즈니스': ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'],
+    '파스텔': ['#FFB6C1', '#87CEEB', '#98FB98', '#F0E68C', '#DDA0DD'],
+    '모던': ['#2E86AB', '#A23B72', '#F18F01', '#C73E1D', '#A61E69'],
+    '자연': ['#8FBC8F', '#F4A460', '#CD853F', '#DEB887', '#D2691E'],
+    '하이테크': ['#00FFFF', '#FF00FF', '#FFFF00', '#FF69B4', '#00FF7F']
+}
+
+# 내가 좋아하는 주제로 데이터 만들기
+my_topic = "___________"  # 예: "내 취미 활동 시간"
+my_categories = ['___', '___', '___', '___', '___']
+my_values = [__, __, __, __, __]
+
+# 색상 팔레트 실험
+fig, axes = plt.subplots(2, 3, figsize=(18, 10))
+axes = axes.flatten()
+
+for i, (palette_name, colors) in enumerate(color_palettes.items()):
+    axes[i].bar(my_categories, my_values, color=colors)
+    axes[i].set_title(f'{palette_name} 팔레트', fontsize=14)
+    axes[i].tick_params(axis='x', rotation=45)
+
+# 나만의 색상 조합 만들기
+my_colors = ['___', '___', '___', '___', '___']  # 나만의 색상 입력
+axes[5].bar(my_categories, my_values, color=my_colors)
+axes[5].set_title('나만의 색상 조합', fontsize=14)
+axes[5].tick_params(axis='x', rotation=45)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>🎨 색상 선택:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>내가 선택한 색상 팔레트:</strong> <span class="blank"></span></li>
+                    </ul>
+                    <div style="margin: 15px 0;">
+                        <strong>나만의 색상 조합:</strong>
+                        <div style="margin: 10px 0;">
+                            <strong>색상 1:</strong> <span class="blank"></span> (이유: <span class="blank"></span>)
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>색상 2:</strong> <span class="blank"></span> (이유: <span class="blank"></span>)
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>색상 3:</strong> <span class="blank"></span> (이유: <span class="blank"></span>)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step">
+                <h4>Step 3: 그라데이션과 투명도 효과</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 그라데이션 막대그래프
+subjects = ['수학', '과학', '영어', '국어', '사회']
+my_scores = [__, __, __, __, __]  # 내 점수 입력
+
+# 점수에 따른 그라데이션 색상
+def score_to_color(score):
+    if score >= 90:
+        return '#ff4757'  # 빨간색 (우수)
+    elif score >= 80:  
+        return '#ffa726'  # 주황색 (양호)
+    elif score >= 70:
+        return '#42a5f5'  # 파란색 (보통)
+    else:
+        return '#66bb6a'  # 초록색 (노력필요)
+
+colors = [score_to_color(score) for score in my_scores]
+
+plt.figure(figsize=(12, 8))
+
+# 메인 막대그래프
+bars = plt.bar(subjects, my_scores, color=colors, alpha=0.8, 
+               edgecolor='white', linewidth=2)
+
+# 그림자 효과
+for i, (bar, score) in enumerate(zip(bars, my_scores)):
+    # 그림자 막대 (약간 뒤쪽에)
+    plt.bar(bar.get_x() + 0.02, score, bar.get_width(), 
+             color='gray', alpha=0.3, zorder=0)
+    
+    # 점수 표시
+    plt.text(bar.get_x() + bar.get_width()/2, score + 1, 
+             f'{score}점', ha='center', va='bottom', 
+             fontsize=12, fontweight='bold')
+
+plt.title('내 성적 분석 (그라데이션 & 그림자 효과)', fontsize=16, fontweight='bold')
+plt.xlabel('과목', fontsize=14)
+plt.ylabel('점수', fontsize=14)
+plt.ylim(0, 100)
+
+# 범례 추가
+from matplotlib.patches import Patch
+legend_elements = [
+    Patch(facecolor='#ff4757', label='우수 (90점 이상)'),
+    Patch(facecolor='#ffa726', label='양호 (80-89점)'),
+    Patch(facecolor='#42a5f5', label='보통 (70-79점)'),
+    Patch(facecolor='#66bb6a', label='노력필요 (70점 미만)')
+]
+plt.legend(handles=legend_elements, loc='upper right')
+
+plt.grid(True, axis='y', alpha=0.3)
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>📊 내 성적 분석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>가장 자신 있는 과목:</strong> <span class="blank"></span> (<span class="blank"></span>점)</li>
+                        <li style="margin: 8px 0;"><strong>개선이 필요한 과목:</strong> <span class="blank"></span> (<span class="blank"></span>점)</li>
+                        <li style="margin: 8px 0;"><strong>그라데이션 효과의 장점:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section section-advanced">
+            <h2>🚀 고급 꾸미기 기법</h2>
+
+            <div class="mission-box">
+                <h4>미션 1: 3D 효과와 특수 스타일</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 3D 막대그래프
+fig = plt.figure(figsize=(12, 8))
+ax = fig.add_subplot(111, projection='3d')
+
+# 데이터
+hobbies = ['게임', '독서', '운동', '음악', '그림']
+time_spent = [__, __, __, __, __]  # 주당 시간 입력
+
+# 3D 막대그래프
+x_pos = np.arange(len(hobbies))
+y_pos = np.zeros(len(hobbies))
+z_pos = np.zeros(len(hobbies))
+
+dx = np.ones(len(hobbies)) * 0.6
+dy = np.ones(len(hobbies)) * 0.6  
+dz = time_spent
+
+colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f7b731', '#5f27cd']
+
+ax.bar3d(x_pos, y_pos, z_pos, dx, dy, dz, color=colors, alpha=0.8)
+
+ax.set_xlabel('취미 활동', fontsize=12)
+ax.set_ylabel('', fontsize=12)
+ax.set_zlabel('시간 (시간/주)', fontsize=12)
+ax.set_title('내 취미 활동 시간 (3D 버전)', fontsize=16, fontweight='bold')
+
+# x축 라벨 설정
+ax.set_xticks(x_pos)
+ax.set_xticklabels(hobbies)
+
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>🌟 3D 그래프 소감:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>2D와 비교해서 어떤 차이점이 있나요?</strong> <span class="blank-long"></span></li>
+                        <li style="margin: 8px 0;"><strong>어떤 상황에서 3D가 더 효과적일까요?</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mission-box">
+                <h4>미션 2: 애니메이션 효과 맛보기</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 간단한 애니메이션 효과 (정적 버전)
+# 시간에 따른 성장을 여러 프레임으로 보여주기
+
+my_heights = [150, 155, 161, 165, 168, 170]  # 6년간 키 성장
+ages = [10, 11, 12, 13, 14, 15]
+
+fig, axes = plt.subplots(2, 3, figsize=(18, 10))
+axes = axes.flatten()
+
+for i in range(6):
+    # 각 프레임마다 누적해서 보여주기
+    current_ages = ages[:i+1]
+    current_heights = my_heights[:i+1]
+    
+    axes[i].plot(current_ages, current_heights, 'o-', 
+                 linewidth=3, markersize=10, color='#e74c3c')
+    axes[i].set_xlim(9, 16)
+    axes[i].set_ylim(145, 175)
+    axes[i].set_title(f'{ages[i]}세까지의 성장', fontsize=14)
+    axes[i].set_xlabel('나이')
+    axes[i].set_ylabel('키 (cm)')
+    axes[i].grid(True, alpha=0.3)
+    
+    # 현재 키 표시
+    if current_heights:
+        axes[i].text(current_ages[-1], current_heights[-1] + 2, 
+                     f'{current_heights[-1]}cm', 
+                     ha='center', fontweight='bold', fontsize=12)
+
+plt.tight_layout()
+plt.show()</code></pre>
+                </div>
+                
+                <div class="analysis-box">
+                    <strong>📈 성장 분석:</strong>
+                    <ul style="list-style: none; padding: 0; margin-top: 10px;">
+                        <li style="margin: 8px 0;"><strong>가장 많이 자란 시기:</strong> <span class="blank"></span>세 ~ <span class="blank"></span>세</li>
+                        <li style="margin: 8px 0;"><strong>총 성장량:</strong> <span class="blank"></span>cm</li>
+                        <li style="margin: 8px 0;"><strong>애니메이션 효과의 장점:</strong> <span class="blank-long"></span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mission-box">
+                <h4>미션 3: 인터랙티브 스타일 그래프</h4>
+                <div class="code-block">
+                    <pre><code class="language-python"># 다중 축과 복합 그래프
+fig, ax1 = plt.subplots(figsize=(12, 8))
+
+# 첫 번째 데이터: 공부시간
+months = ['1월', '2월', '3월', '4월', '5월', '6월']
+study_hours = [__, __, __, __, __, __]  # 월별 공부시간
+
+color1 = '#1f77b4'
+ax1.set_xlabel('월', fontsize=14)
+ax1.set_ylabel('공부시간 (시간)', color=color1, fontsize=14)
+bars = ax1.bar(months, study_hours, color=color1, alpha=0.7, label='공부시간')
+ax1.tick_params(axis='y', labelcolor=color1)
+
+# 두 번째 축: 성적
+ax2 = ax1.twinx()
+grades = [__, __, __, __, __, __]  # 월별 평균 성적
+
+color2 = '#ff7f0e'
+ax2.set_ylabel('평균 성적', color=color2, fontsize=14)
+line = ax2.plot(months, grades, color=color2, marker='o', 
+                linewidth=3, markersize=8, label='평균 성적')
+ax2.tick_params(axis='y', labelcolor=color2)
+
+# 제목과 격자
+fig.suptitle('📚 공부시간 vs 성적 상관관
