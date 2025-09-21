@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 9: pandas 소개 - 데이터 표의 마법사</title>
+    <style>
+        /* 복사 방지를 위한 스타일 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: #ffffff;
+            color: #333;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: bold;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #e74c3c;
+            border-left: 5px solid #e74c3c;
+            padding-left: 15px;
+            margin-top: 30px;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        h3 {
+            color: #3498db;
+            margin-top: 25px;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        h4 {
+            color: #8e44ad;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        .objective-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .objective-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .objective-list li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            background: #ffffff;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .objective-list li::before {
+            content: "🎯";
+            position: absolute;
+            left: 8px;
+        }
+
+        .intro-section {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .thinking-box {
+            background: #f3e5f5;
+            border: 2px solid #9c27b0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .input-box {
+            background: #ffffff;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 8px;
+            margin: 5px 0;
+            width: calc(100% - 20px);
+            font-size: 14px;
+            color: #333;
+        }
+
+        .input-box:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 3px solid #007acc;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-block::before {
+            content: "💻 Python Code";
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #007acc;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+        }
+
+        /* Python 문법 하이라이팅 */
+        .code-block .keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-block .function {
+            color: #dcdcaa;
+        }
+
+        .code-block .number {
+            color: #b5cea8;
+        }
+
+        .code-block .variable {
+            color: #9cdcfe;
+        }
+
+        .practice-section {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .challenge-section {
+            background: #fce4ec;
+            border: 2px solid #e91e63;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .creative-section {
+            background: #f1f8e9;
+            border: 2px solid #8bc34a;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .summary-section {
+            background: #e8eaf6;
+            border: 2px solid #3f51b5;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .quiz-box {
+            background: #fff8e1;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .textarea {
+            width: calc(100% - 20px);
+            min-height: 80px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .completion-check {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 12px;
+            background: #f0f8ff;
+            border: 1px solid #87ceeb;
+            border-radius: 8px;
+        }
+
+        .completion-check input[type="checkbox"] {
+            margin-right: 15px;
+            transform: scale(1.3);
+            accent-color: #3498db;
+        }
+
+        .completion-check label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .final-section {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        /* 우클릭, 드래그 방지 */
+        .no-context {
+            pointer-events: none;
+        }
+
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .code-block {
+                font-size: 12px;
+                padding: 15px;
+            }
+        }
+
+        /* 인쇄 방지 */
+        @media print {
+            body {
+                display: none;
+            }
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid #ffeaa7;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        /* 라디오 버튼 스타일 */
+        input[type="radio"] {
+            margin: 0 8px 0 20px;
+            transform: scale(1.2);
+            accent-color: #3498db;
+        }
+
+        label {
+            font-weight: 500;
+        }
+
+        /* 코드 블록 내 특정 요소 스타일 */
+        .code-line {
+            margin: 2px 0;
+        }
+
+        .code-indent {
+            margin-left: 20px;
+        }
+
+        .concept-box {
+            background: #f5f5f5;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .advantage-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .advantage-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .advantage-list li::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+    
+    <div class="container">
+        <h1>📊 Week 9: pandas 소개 - 데이터 표의 마법사</h1>
+        
+        <div class="objective-box">
+            <h2>🎯 이번 주 학습 목표</h2>
+            <ul class="objective-list">
+                <li>pandas와 DataFrame이 뭔지 알아보기</li>
+                <li>NumPy와 pandas의 차이점 이해하기</li>
+                <li>데이터 표를 쉽게 만들고 조작하는 방법 배우기</li>
+            </ul>
+        </div>
+
+        <div class="intro-section">
+            <h2>🤔 도입: 데이터 표, 어떻게 관리할까?</h2>
+            <p>여러분은 엑셀을 써본 적이 있나요? 성적표나 가계부를 만들 때 표 형태로 데이터를 정리하죠. 
+            프로그래밍에서도 이런 표 형태의 데이터를 다루는 강력한 도구가 있어요. 바로 <strong class="highlight">pandas</strong>입니다!</p>
+            
+            <div class="thinking-box">
+                <h3>🔍 잠깐! 생각해보기</h3>
+                <p>우리 반 친구들의 정보를 정리한다면?</p>
+                <p>이름, 키, 몸무게, 좋아하는 과목, 취미...</p>
+                <p><strong>이런 정보들을 어떻게 정리하면 좋을까요?</strong></p>
+                <textarea class="textarea" placeholder="어떤 방법으로 정리하면 좋을지 생각해보세요"></textarea>
+            </div>
+        </div>
+
+        <div class="practice-section">
+            <h2>💻 실습 1: NumPy vs pandas - 무엇이 다를까?</h2>
+            
+            <h3>NumPy로 성적 데이터 만들기</h3>
+            <div class="code-block">
+<div class="code-line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># NumPy 배열로 성적표 만들기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== NumPy 버전 성적표 ==="</span>)</div>
+<div class="code-line"><span class="variable">scores_numpy</span> = np.<span class="function">array</span>([</div>
+<div class="code-line code-indent">[<span class="number">85</span>, <span class="number">92</span>, <span class="number">78</span>],  <span class="comment"># 철수</span></div>
+<div class="code-line code-indent">[<span class="number">90</span>, <span class="number">88</span>, <span class="number">95</span>],  <span class="comment"># 영희</span></div>
+<div class="code-line code-indent">[<span class="number">76</span>, <span class="number">82</span>, <span class="number">89</span>]   <span class="comment"># 민수</span></div>
+<div class="code-line">])</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">scores_numpy</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"이 숫자들이 뭘 의미하는지 알 수 있나요? 🤔"</span>)</div>
+            </div>
+
+            <h3>pandas로 같은 데이터 만들기</h3>
+            <div class="code-block">
+<div class="code-line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># pandas DataFrame으로 성적표 만들기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"\n=== pandas 버전 성적표 ==="</span>)</div>
+<div class="code-line"><span class="variable">scores_pandas</span> = pd.<span class="function">DataFrame</span>({</div>
+<div class="code-line code-indent"><span class="string">'국어'</span>: [<span class="number">85</span>, <span class="number">90</span>, <span class="number">76</span>],</div>
+<div class="code-line code-indent"><span class="string">'영어'</span>: [<span class="number">92</span>, <span class="number">88</span>, <span class="number">82</span>],</div>
+<div class="code-line code-indent"><span class="string">'수학'</span>: [<span class="number">78</span>, <span class="number">95</span>, <span class="number">89</span>]</div>
+<div class="code-line">}, index=[<span class="string">'철수'</span>, <span class="string">'영희'</span>, <span class="string">'민수'</span>])</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">scores_pandas</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"어느 쪽이 더 이해하기 쉬운가요? ✨"</span>)</div>
+            </div>
+
+            <div class="quiz-box">
+                <h4>🎮 미니 퀴즈</h4>
+                <p><strong>1. NumPy와 pandas 중 어느 것이 더 보기 좋나요?</strong></p>
+                <input type="radio" name="quiz1" id="numpy"> <label for="numpy">NumPy</label>
+                <input type="radio" name="quiz1" id="pandas"> <label for="pandas">pandas</label>
+                
+                <p><strong>2. pandas에서 `index`는 무엇을 의미할까요?</strong></p>
+                <textarea class="textarea" placeholder="index가 무엇인지 생각해보세요"></textarea>
+                
+                <p><strong>3. `DataFrame`이라는 단어에서 'Frame'은 무엇을 뜻할까요?</strong></p>
+                <textarea class="textarea" placeholder="Frame이 무엇을 의미하는지 생각해보세요"></textarea>
+            </div>
+        </div>
+
+        <div class="practice-section">
+            <h2>🏗️ 실습 2: 나만의 DataFrame 만들어보기</h2>
+            
+            <h3>우리 반 친구들 정보 DataFrame 만들기</h3>
+            <div class="code-block">
+<div class="code-line"><span class="comment"># 여러분이 직접 채워보세요!</span></div>
+<div class="code-line"><span class="variable">friends_info</span> = pd.<span class="function">DataFrame</span>({</div>
+<div class="code-line code-indent"><span class="string">'이름'</span>: [<span class="string">'김철수'</span>, <span class="string">'이영희'</span>, <span class="string">'박민수'</span>, <span class="string">'최지은'</span>],</div>
+<div class="code-line code-indent"><span class="string">'나이'</span>: [<span class="number">14</span>, <span class="number">15</span>, <span class="number">14</span>, <span class="number">15</span>],</div>
+<div class="code-line code-indent"><span class="string">'키'</span>: [<span class="number">165</span>, <span class="number">160</span>, <span class="number">170</span>, <span class="number">158</span>],</div>
+<div class="code-line code-indent"><span class="string">'좋아하는_과목'</span>: [<span class="string">'수학'</span>, <span class="string">'영어'</span>, <span class="string">'과학'</span>, <span class="string">'국어'</span>],</div>
+<div class="code-line code-indent"><span class="string">'취미'</span>: [<span class="string">'축구'</span>, <span class="string">'독서'</span>, <span class="string">'게임'</span>, <span class="string">'그림'</span>]</div>
+<div class="code-line">})</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 우리 반 친구들 정보 ==="</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">friends_info</span>)</div>
+            </div>
+
+            <h3>DataFrame 기본 정보 알아보기</h3>
+            <div class="code-block">
+<div class="code-line"><span class="comment"># DataFrame의 크기 확인</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"행 개수: {len(friends_info)}"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"열 개수: {len(friends_info.columns)}"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"전체 크기: {friends_info.shape}"</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 컬럼 이름들 확인</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"컬럼들: {list(friends_info.columns)}"</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 데이터 타입 확인</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"\n=== 각 컬럼의 데이터 타입 ==="</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">friends_info</span>.<span class="function">dtypes</span>)</div>
+            </div>
+
+            <div class="thinking-box">
+                <h4>📝 실습 결과 기록하기</h4>
+                <p><strong>우리 반 친구들 DataFrame의 크기는?</strong></p>
+                <p>행 개수: <input type="text" class="input-box" placeholder="개" style="width: 80px; display: inline-block;"> 개</p>
+                <p>열 개수: <input type="text" class="input-box" placeholder="개" style="width: 80px; display: inline-block;"> 개</p>
+                <p><strong>어떤 컬럼들이 있나요?</strong></p>
+                <textarea class="textarea" placeholder="컬럼 이름들을 적어보세요"></textarea>
+            </div>
+        </div>
+
+        <div class="practice-section">
+            <h2>🎯 실습 3: DataFrame 조작의 기초</h2>
+            
+            <h3>특정 데이터 가져오기</h3>
+            <div class="code-block">
+<div class="code-line"><span class="comment"># 특정 컬럼 가져오기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 이름만 가져오기 ==="</span>)</div>
+<div class="code-line"><span class="variable">names</span> = <span class="variable">friends_info</span>[<span class="string">'이름'</span>]</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">names</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"데이터 타입: {type(names)}"</span>)  <span class="comment"># Series라고 나와요!</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 여러 컬럼 가져오기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"\n=== 이름과 나이만 가져오기 ==="</span>)</div>
+<div class="code-line"><span class="variable">name_age</span> = <span class="variable">friends_info</span>[[<span class="string">'이름'</span>, <span class="string">'나이'</span>]]</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">name_age</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"데이터 타입: {type(name_age)}"</span>)  <span class="comment"># DataFrame이에요!</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 특정 행 가져오기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"\n=== 첫 번째 친구 정보 ==="</span>)</div>
+<div class="code-line"><span class="variable">first_friend</span> = <span class="variable">friends_info</span>.<span class="function">iloc</span>[<span class="number">0</span>]  <span class="comment"># iloc: 위치로 접근</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">first_friend</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 특정 데이터 하나만 가져오기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"\n첫 번째 친구의 이름: {friends_info.iloc[0, 0]}"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"영희의 취미: {friends_info.loc[1, '취미']}"</span>)  <span class="comment"># loc: 라벨로 접근</span></div>
+            </div>
+
+            <h3>새로운 컬럼 추가하기</h3>
+            <div class="code-block">
+<div class="code-line"><span class="comment"># 성별 컬럼 추가</span></div>
+<div class="code-line"><span class="variable">friends_info</span>[<span class="string">'성별'</span>] = [<span class="string">'남'</span>, <span class="string">'여'</span>, <span class="string">'남'</span>, <span class="string">'여'</span>]</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 가상의 몸무게 데이터 추가</span></div>
+<div class="code-line"><span class="variable">friends_info</span>[<span class="string">'몸무게'</span>] = [<span class="number">55</span>, <span class="number">48</span>, <span class="number">62</span>, <span class="number">45</span>]</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># BMI 계산해서 추가 (키는 cm 단위)</span></div>
+<div class="code-line"><span class="variable">friends_info</span>[<span class="string">'BMI'</span>] = <span class="variable">friends_info</span>[<span class="string">'몸무게'</span>] / ((<span class="variable">friends_info</span>[<span class="string">'키'</span>] / <span class="number">100</span>) ** <span class="number">2</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 새 컬럼이 추가된 DataFrame ==="</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">friends_info</span>)</div>
+            </div>
+
+            <div class="thinking-box">
+                <h4>📝 실습 결과 기록하기</h4>
+                <p><strong>iloc과 loc의 차이점은 무엇인가요?</strong></p>
+                <textarea class="textarea" placeholder="iloc과 loc의 차이점을 설명해보세요"></textarea>
+                
+                <p><strong>새로 추가된 컬럼들은?</strong></p>
+                <p>추가된 컬럼: <input type="text" class="input-box" placeholder="컬럼 이름들을 적어보세요" style="width: 300px; display: inline-block;"></p>
+            </div>
+        </div>
+
+        <div class="practice-section">
+            <h2>🔍 실습 4: DataFrame 탐색하기</h2>
+            
+            <h3>데이터 미리보기</h3>
+            <div class="code-block">
+<div class="code-line"><span class="comment"># 처음 몇 행 보기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 처음 3행 보기 ==="</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">friends_info</span>.<span class="function">head</span>(<span class="number">3</span>))</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 마지막 몇 행 보기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"\n=== 마지막 2행 보기 ==="</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">friends_info</span>.<span class="function">tail</span>(<span class="number">2</span>))</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 기본 통계 정보</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"\n=== 숫자 컬럼 통계 정보 ==="</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">friends_info</span>.<span class="function">describe</span>())</div>
+            </div>
+
+            <h3>데이터 정보 확인하기</h3>
+            <div class="code-block">
+<div class="code-line"><span class="comment"># 전체 정보 보기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== DataFrame 전체 정보 ==="</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">friends_info</span>.<span class="function">info</span>())</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 각 컬럼의 고유값 개수</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"\n=== 각 컬럼의 고유값 개수 ==="</span>)</div>
+<div class="code-line"><span class="keyword">for</span> <span class="variable">column</span> <span class="keyword">in</span> <span class="variable">friends_info</span>.<span class="function">columns</span>:</div>
+<div class="code-line code-indent"><span class="variable">unique_count</span> = <span class="variable">friends_info</span>[<span class="variable">column</span>].<span class="function">nunique</span>()</div>
+<div class="code-line code-indent"><span class="function">print</span>(<span class="string">f"{column}: {unique_count}개"</span>)</div>
+            </div>
+
+            <div class="thinking-box">
+                <h4>📝 탐색 결과 기록하기</h4>
+                <p><strong>head()와 tail() 함수는 언제 사용하면 좋을까요?</strong></p>
+                <textarea class="textarea" placeholder="head()와 tail() 함수의 사용 목적을 설명해보세요"></textarea>
+                
+                <p><strong>describe() 함수로 알 수 있는 정보들은?</strong></p>
+                <textarea class="textarea" placeholder="describe()로 알 수 있는 통계 정보들을 나열해보세요"></textarea>
+            </div>
+        </div>
+
+        <div class="challenge-section">
+            <h2>🎮 도전 과제: 나만의 데이터 만들기</h2>
+            
+            <h3>과제 1: 가족 정보 DataFrame 만들기</h3>
+            <div class="code-block">
+<div class="code-line"><span class="comment"># 여러분의 가족 정보로 DataFrame을 만들어보세요!</span></div>
+<div class="code-line"><span class="comment"># 포함할 정보: 이름, 관계, 나이, 직업, 좋아하는_음식</span></div>
+<div class="code-line"><span class="comment"># 최소 3명 이상</span></div>
+<div class="code-line"></div>
+<div class="code-line"><span class="variable">family_info</span> = pd.<span class="function">DataFrame</span>({</div>
+<div class="code-line code-indent"><span class="comment"># 여기에 코드를 작성하세요</span></div>
+<div class="code-line">})</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 우리 가족 정보 ==="</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">family_info</span>)</div>
+            </div>
+
+            <div class="thinking-box">
+                <h4>📝 나만의 가족 DataFrame 설계하기</h4>
+                <p><strong>가족 구성원들의 이름:</strong></p>
+                <input type="text" class="input-box" placeholder="가족 구성원들의 이름을 적어보세요">
+                
+                <p><strong>포함할 컬럼들:</strong></p>
+                <textarea class="textarea" placeholder="어떤 정보들을 포함할지 계획해보세요"></textarea>
+                
+                <p><strong>예상되는 DataFrame 크기:</strong></p>
+                <p>행 개수: <input type="text" class="input-box" placeholder="명" style="width: 80px; display: inline-block;"> 명</p>
+                <p>열 개수: <input type="text" class="input-box" placeholder="개" style="width: 80px; display: inline-block;"> 개</p>
+            </div>
+
+            <h3>과제 2: 우리 반 점심 메뉴 조사</h3>
+            <div class="code-block">
+<div class="code-line"><span class="comment"># 일주일간 점심 메뉴와 만족도를 기록해보세요</span></div>
+<div class="code-line"><span class="variable">lunch_survey</span> = pd.<span class="function">DataFrame</span>({</div>
+<div class="code-line code-indent"><span class="string">'요일'</span>: [<span class="string">'월'</span>, <span class="string">'화'</span>, <span class="string">'수'</span>, <span class="string">'목'</span>, <span class="string">'금'</span>],</div>
+<div class="code-line code-indent"><span class="string">'메뉴'</span>: [<span class="string">'김치찌개'</span>, <span class="string">'불고기'</span>, <span class="string">'카레'</span>, <span class="string">'비빔밥'</span>, <span class="string">'치킨'</span>],</div>
+<div class="code-line code-indent"><span class="string">'만족도'</span>: [<span class="number">4</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>],  <span class="comment"># 1-5점 척도</span></div>
+<div class="code-line code-indent"><span class="string">'가격'</span>: [<span class="number">4000</span>, <span class="number">6000</span>, <span class="number">3500</span>, <span class="number">4500</span>, <span class="number">7000</span>]</div>
+<div class="code-line">})</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== 우리 반 점심 메뉴 조사 ==="</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">lunch_survey</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 평균 만족도와 가격 계산해보기</span></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"평균 만족도: {lunch_survey['만족도'].mean():.1f}점"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"평균 가격: {lunch_survey['가격'].mean():.0f}원"</span>)</div>
+            </div>
+
+            <div class="thinking-box">
+                <h4>📝 점심 메뉴 분석 결과</h4>
+                <p><strong>평균 만족도:</strong> <input type="text" class="input-box" placeholder="점" style="width: 80px; display: inline-block;"> 점</p>
+                <p><strong>평균 가격:</strong> <input type="text" class="input-box" placeholder="원" style="width: 100px; display: inline-block;"> 원</p>
+                <p><strong>가장 만족도가 높은 메뉴:</strong> <input type="text" class="input-box" placeholder="메뉴명" style="width: 150px; display: inline-block;"></p>
+                <p><strong>가장 비싼 메뉴:</strong> <input type="text" class="input-box" placeholder="메뉴명" style="width: 150px; display: inline-block;"></p>
+            </div>
+        </div>
+
+        <div class="creative-section">
+            <h2>🎨 창의적 활동: DataFrame으로 스토리 만들기</h2>
+            
+            <h3>RPG 게임 캐릭터 데이터베이스</h3>
+            <div class="code-block">
+<div class="code-line"><span class="comment"># 게임 캐릭터들의 정보를 DataFrame으로 만들어보세요!</span></div>
+<div class="code-line"><span class="variable">rpg_characters</span> = pd.<span class="function">DataFrame</span>({</div>
+<div class="code-line code-indent"><span class="string">'이름'</span>: [<span class="string">'용사 김용용'</span>, <span class="string">'마법사 이마마'</span>, <span class="string">'도적 박도도'</span>, <span class="string">'성직자 최성성'</span>],</div>
+<div class="code-line code-indent"><span class="string">'직업'</span>: [<span class="string">'전사'</span>, <span class="string">'마법사'</span>, <span class="string">'도적'</span>, <span class="string">'성직자'</span>],</div>
+<div class="code-line code-indent"><span class="string">'레벨'</span>: [<span class="number">25</span>, <span class="number">23</span>, <span class="number">27</span>, <span class="number">24</span>],</div>
+<div class="code-line code-indent"><span class="string">'체력'</span>: [<span class="number">150</span>, <span class="number">80</span>, <span class="number">120</span>, <span class="number">100</span>],</div>
+<div class="code-line code-indent"><span class="string">'마나'</span>: [<span class="number">50</span>, <span class="number">200</span>, <span class="number">70</span>, <span class="number">180</span>],</div>
+<div class="code-line code-indent"><span class="string">'공격력'</span>: [<span class="number">80</span>, <span class="number">45</span>, <span class="number">75</span>, <span class="number">35</span>],</div>
+<div class="code-line code-indent"><span class="string">'방어력'</span>: [<span class="number">70</span>, <span class="number">25</span>, <span class="number">40</span>, <span class="number">60</span>]</div>
+<div class="code-line">})</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="function">print</span>(<span class="string">"=== RPG 파티 정보 ==="</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="variable">rpg_characters</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 파티 전체 능력 계산</span></div>
+<div class="code-line"><span class="variable">total_hp</span> = <span class="variable">rpg_characters</span>[<span class="string">'체력'</span>].<span class="function">sum</span>()</div>
+<div class="code-line"><span class="variable">total_attack</span> = <span class="variable">rpg_characters</span>[<span class="string">'공격력'</span>].<span class="function">sum</span>()</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"\n파티 총 체력: {total_hp}"</span>)</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"파티 총 공격력: {total_attack}"</span>)</div>
+<div class="code-line"></div>
+<div class="code-line"><span class="comment"># 가장 강한 캐릭터 찾기</span></div>
+<div class="code-line"><span class="variable">strongest</span> = <span class="variable">rpg_characters</span>.<span class="function">loc</span>[<span class="variable">rpg_characters</span>[<span class="string">'공격력'</span>].<span class="function">idxmax</span>()]</div>
+<div class="code-line"><span class="function">print</span>(<span class="string">f"최강 공격력 캐릭터: {strongest['이름']} ({strongest['공격력']})"</span>)</div>
+            </div>
+
+            <div class="thinking-box">
+                <h4>📝 RPG 캐릭터 분석 결과</h4>
+                <p><strong>파티 총 체력:</strong> <input type="text" class="input-box" placeholder="총 체력" style="width: 100px; display: inline-block;"></p>
+                <p><strong>파티 총 공격력:</strong> <input type="text" class="input-box" placeholder="총 공격력" style="width: 100px; display: inline-block;"></p>
+                <p><strong>최강 공격력 캐릭터:</strong> <input type="text" class="input-box" placeholder="캐릭터명" style="width: 150px; display: inline-block;"></p>
+                <p><strong>나만의 RPG 캐릭터 추가하기:</strong></p>
+                <p>이름: <input type="text" class="input-box" placeholder="캐릭터 이름" style="width: 150px; display: inline-block;"></p>
+                <p>직업: <input type="text" class="input-box" placeholder="직업" style="width: 100px; display: inline-block;"></p>
+                <p>특별한 능력: <textarea class="textarea" placeholder="나만의 캐릭터의 특별한 능력을 설명해보세요"></textarea></p>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h2>💡 오늘 배운 것 정리</h2>
+            
+            <div class="concept-box">
+                <h3>pandas의 장점</h3>
+                <ul class="advantage-list">
+                    <li><strong>가독성</strong>: 데이터가 표 형태로 깔끔하게 보임</li>
+                    <li><strong>직관성</strong>: 엑셀처럼 친숙한 방식으로 데이터 조작</li>
+                    <li><strong>편리성</strong>: 복잡한 데이터 분석이 간단한 코드로 가능</li>
+                    <li><strong>실용성</strong>: 실제 데이터 과학에서 가장 많이 사용</li>
+                </ul>
+            </div>
+
+            <div class="concept-box">
+                <h3>핵심 개념</h3>
+                <p><strong>DataFrame</strong>: 표 형태의 2차원 데이터 구조</p>
+                <p><strong>Series</strong>: 1차원 데이터 구조 (DataFrame의 한 컬럼)</p>
+                <p><strong>index</strong>: 각 행을 구분하는 라벨</p>
+                <p><strong>columns</strong>: 각 열의 이름</p>
+            </div>
+
+            <div class="concept-box">
+                <h3>기본 메소드</h3>
+                <p><strong>.head(), .tail()</strong>: 데이터 미리보기</p>
+                <p><strong>.info(), .describe()</strong>: 데이터 정보 확인</p>
+                <p><strong>.iloc[], .loc[]</strong>: 특정 데이터 접근</p>
+                <p><strong>.shape, .columns</strong>: DataFrame 구조 확인</p>
+            </div>
+
+            <div class="thinking-box">
+                <h4>📝 학습 정리하기</h4>
+                <p><strong>pandas와 NumPy의 가장 큰 차이점은?</strong></p>
+                <textarea class="textarea" placeholder="pandas와 NumPy의 차이점을 자신의 말로 설명해보세요"></textarea>
+                
+                <p><strong>DataFrame에서 가장 유용하다고 생각하는 기능은?</strong></p>
+                <textarea class="textarea" placeholder="왜 그 기능이 유용하다고 생각하는지 이유도 함께 적어보세요"></textarea>
+                
+                <p><strong>실생활에서 DataFrame을 사용할 수 있는 예시 3가지:</strong></p>
+                <p>1. <input type="text" class="input-box" placeholder="예시 1" style="width: 300px; display: inline-block;"></p>
+                <p>2. <input type="text" class="input-box" placeholder="예시 2" style="width: 300px; display: inline-block;"></p>
+                <p>3. <input type="text" class="input-box" placeholder="예시 3" style="width: 300px; display: inline-block;"></p>
+            </div>
+        </div>
+
+        <div class="final-section">
+            <h2>🚀 다음 주 예고: CSV 파일과 친해지기</h2>
+            
+            <p>다음 주에는 실제 파일에서 데이터를 불러와서 분석해볼 거예요!</p>
+            
+            <div class="concept-box">
+                <h3>다음 주 학습 내용</h3>
+                <ul class="advantage-list">
+                    <li>CSV 파일 읽기와 저장하기</li>
+                    <li>더러운 데이터 깨끗하게 정리하기</li>
+                    <li>빈 데이터(결측값) 처리하는 방법</li>
+                </ul>
+            </div>
+
+            <p>집에서 엑셀로 간단한 데이터를 만들어보는 것도 좋은 연습이 될 거예요! 📊✨</p>
+
+            <div class="thinking-box">
+                <h4>📝 다음 주 준비하기</h4>
+                <p><strong>어떤 CSV 파일을 분석해보고 싶나요?</strong></p>
+                <textarea class="textarea" placeholder="관심 있는 데이터나 분석하고 싶은 주제를 적어보세요"></textarea>
+                
+                <p><strong>집에서 만들어볼 수 있는 간단한 데이터는?</strong></p>
+                <textarea class="textarea" placeholder="가족, 친구, 취미 등과 관련된 데이터 아이디어를 적어보세요"></textarea>
+            </div>
+        </div>
+
+        <div class="final-section">
+            <h2>✅ 체크리스트</h2>
+            
+            <div class="completion-check">
+                <input type="checkbox" id="check1"> <label for="check1">NumPy와 pandas의 차이점을 설명할 수 있나요?</label>
+            </div>
+            <div class="completion-check">
+                <input type="checkbox" id="check2"> <label for="check2">DataFrame을 만들고 기본 정보를 확인할 수 있나요?</label>
+            </div>
+            <div class="completion-check">
+                <input type="checkbox" id="check3"> <label for="check3">특정 행이나 열의 데이터를 가져올 수 있나요?</label>
+            </div>
+            <div class="completion-check">
+                <input type="checkbox" id="check4"> <label for="check4">새로운 컬럼을 추가할 수 있나요?</label>
+            </div>
+            <div class="completion-check">
+                <input type="checkbox" id="check5"> <label for="check5">간단한 통계를 계산할 수 있나요?</label>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center; font-size: 18px; font-weight: bold; color: #e74c3c;">
+                <p>모든 항목에 체크할 수 있다면 pandas 마법사 1단계 달성! 🎉</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 복사 방지 기능 강화
+        document.addEventListener('keydown', function(e) {
+            // Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+S, Ctrl+P, F12 등 방지
+            if (e.ctrlKey && (e.keyCode === 65 || e.keyCode === 67 || e.keyCode === 86 || e.keyCode === 83 || e.keyCode === 80)) {
+                e.preventDefault();
+                return false;
+            }
+            // F12 (개발자 도구) 방지
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // 개발자 도구 열기 방지
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // 텍스트 선택 방지
+        document.onselectstart = function() {
+            return false;
+        };
+
+        document.onmousedown = function() {
+            return false;
+        };
+
+        // 드래그 방지
+        document.ondragstart = function() {
+            return false;
+        };
+
+        // 인쇄 방지
+        window.addEventListener('beforeprint', function(e) {
+            e.preventDefault();
+            alert('이 문서는 인쇄할 수 없습니다.');
+            return false;
+        });
+
+        // 페이지 이탈시 경고
+        window.addEventListener('beforeunload', function(e) {
+            e.preventDefault();
+            e.returnValue = '';
+        });
+
+        // 체크박스와 라디오 버튼의 상태 저장 (임시)
+        function saveProgress() {
+            // 로컬 스토리지 대신 메모리에만 저장
+            console.log('Progress saved in memory');
+        }
+
+        // 입력 필드에 이벤트 리스너 추가
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(function(input) {
+                input.addEventListener('change', saveProgress);
+                input.addEventListener('input', saveProgress);
+            });
+        });
+    </script>
+</body>
+</html>
