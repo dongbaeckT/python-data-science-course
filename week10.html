@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10: CSV 파일 읽고 데이터 정리하기</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: #ffffff;
+            color: #333;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: bold;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #27ae60;
+            border-left: 5px solid #27ae60;
+            padding-left: 15px;
+            margin-top: 30px;
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        h3 {
+            color: #2980b9;
+            margin-top: 25px;
+            font-size: 1.4em;
+            font-weight: bold;
+        }
+
+        h4 {
+            color: #8e44ad;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+
+        .objective-box {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .objective-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .objective-list li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            background: #ffffff;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .objective-list li::before {
+            content: "🎯";
+            position: absolute;
+            left: 8px;
+        }
+
+        .intro-section {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .thinking-box {
+            background: #f3e5f5;
+            border: 2px solid #9c27b0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .csv-example {
+            background: #f5f5f5;
+            border: 2px solid #607d8b;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            color: #333;
+            white-space: pre;
+        }
+
+        .input-box {
+            background: #ffffff;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 8px;
+            margin: 5px 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .input-box:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 3px solid #007acc;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            white-space: pre;
+        }
+
+        .code-block::before {
+            content: "💻 Python Code";
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: #007acc;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+        }
+
+        .practice-section {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .challenge-section {
+            background: #fce4ec;
+            border: 2px solid #e91e63;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .clean-section {
+            background: #fff8e1;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tip-section {
+            background: #e0f2f1;
+            border: 2px solid #009688;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .summary-section {
+            background: #e8eaf6;
+            border: 2px solid #3f51b5;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: #ffebee;
+            border: 2px solid #f44336;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .textarea {
+            width: calc(100% - 20px);
+            min-height: 80px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+
+        .textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        .completion-check {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 12px;
+            background: #f0f8ff;
+            border: 1px solid #87ceeb;
+            border-radius: 8px;
+        }
+
+        .completion-check input[type="checkbox"] {
+            margin-right: 15px;
+            transform: scale(1.3);
+            accent-color: #3498db;
+        }
+
+        .completion-check label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .final-section {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .concept-box {
+            background: #f5f5f5;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .advantage-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .advantage-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .advantage-list li::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            h1 { font-size: 2em; }
+            .code-block {
+                font-size: 12px;
+                padding: 15px;
+            }
+        }
+
+        @media print {
+            body { display: none; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+    
+    <div class="container">
+        <h1>📂 Week 10: CSV 파일 읽고 데이터 정리하기</h1>
+        
+        <div class="objective-box">
+            <h2>🎯 이번 주 학습 목표</h2>
+            <ul class="objective-list">
+                <li>CSV 파일이 무엇인지 이해하고 읽어오기</li>
+                <li>실제 파일의 데이터를 pandas로 불러오기</li>
+                <li>더러운 데이터를 깨끗하게 정리하는 방법 배우기</li>
+                <li>결측값(빈 데이터)을 처리하는 방법 익히기</li>
+            </ul>
+        </div>
+
+        <div class="intro-section">
+            <h2>🤔 도입: CSV 파일이 뭐야?</h2>
+            
+            <h3>CSV = Comma Separated Values</h3>
+            <p>쉼표로 구분된 값들! 엑셀 파일을 간단하게 만든 거라고 생각하면 돼요.</p>
+            
+            <div class="csv-example">이름,나이,키,몸무게
+김철수,14,165,55
+이영희,15,160,50
+박민수,14,170,60</div>
+
+            <div class="thinking-box">
+                <h3>🔍 생각해보기</h3>
+                <p><strong>왜 엑셀이 있는데 CSV를 쓸까요?</strong></p>
+                <textarea class="textarea" placeholder="CSV의 장점을 생각해보세요"></textarea>
+                <p style="margin-top: 10px;"><strong>힌트:</strong> 용량, 호환성, 단순성!</p>
+            </div>
+        </div>
+
+        <div class="practice-section">
+            <h2>💻 실습 1: 첫 번째 CSV 파일 읽어보기</h2>
+            
+            <h3>간단한 CSV 파일 만들고 읽기</h3>
+            <div class="code-block">import pandas as pd
+
+# CSV 파일 읽기 - 가장 기본!
+df = pd.read_csv('student_scores.csv')
+
+print("=== 데이터 첫 만남 ===")
+print(df)
+
+# 데이터 훑어보기
+print("\n=== 처음 5줄 미리보기 ===")
+print(df.head())
+
+print("\n=== 마지막 5줄 미리보기 ===")
+print(df.tail())</div>
+
+            <h3>데이터 기본 정보 확인하기</h3>
+            <div class="code-block"># 데이터가 얼마나 있는지 확인
+print(f"전체 행 개수: {len(df)}")
+print(f"전체 열 개수: {len(df.columns)}")
+print(f"데이터 크기: {df.shape}")  # (행, 열)
+
+# 어떤 컬럼들이 있는지 확인
+print(f"\n컬럼 목록: {list(df.columns)}")
+
+# 상세 정보 한눈에 보기
+print("\n=== 데이터 전체 정보 ===")
+print(df.info())</div>
+
+            <div class="thinking-box">
+                <h4>🎮 실습 활동</h4>
+                <p>아래 CSV 파일을 만들어서 읽어보세요!</p>
+                <div class="csv-example">제목,장르,평점,관객수
+범죄도시,액션,9.2,688
+서울의봄,드라마,9.1,1301
+파묘,미스터리,8.9,1129</div>
+                
+                <p style="margin-top: 15px;"><strong>실습 결과 기록:</strong></p>
+                <p>전체 행 개수: <input type="text" class="input-box" style="width: 80px; display: inline-block;"> 개</p>
+                <p>전체 열 개수: <input type="text" class="input-box" style="width: 80px; display: inline-block;"> 개</p>
+                <p>컬럼 목록: <input type="text" class="input-box" style="width: 400px; display: inline-block;"></p>
+            </div>
+        </div>
+
+        <div class="clean-section">
+            <h2>🧹 실습 2: 더러운 데이터와의 전쟁!</h2>
+            
+            <h3>실제 세상의 데이터는 지저분해요</h3>
+            <div class="code-block"># 실제로 자주 보는 지저분한 데이터
+messy_data = pd.read_csv('messy_students.csv')
+
+print("=== 원본 데이터 (지저분!) ===")
+print(messy_data)</div>
+
+            <div class="warning-box">
+                <h4>⚠️ 흔한 문제들:</h4>
+                <ul>
+                    <li>빈칸 (결측값, NaN)</li>
+                    <li>중복된 데이터</li>
+                    <li>이상한 공백</li>
+                    <li>잘못된 데이터 타입</li>
+                </ul>
+            </div>
+
+            <h3>문제 1: 빈 데이터 찾기</h3>
+            <div class="code-block">print("=== 빈 데이터 있나요? ===")
+print(df.isnull())  # True/False로 보여줌
+
+print("\n=== 각 컬럼별 빈 데이터 개수 ===")
+print(df.isnull().sum())
+
+print("\n=== 전체 빈 데이터 개수 ===")
+print(df.isnull().sum().sum())</div>
+
+            <h3>문제 2: 빈 데이터 처리하기</h3>
+            <div class="code-block"># 방법 1: 빈 데이터가 있는 행 전체 삭제
+print("=== 방법 1: 행 삭제 ===")
+df_dropped = df.dropna()
+print(f"원래 행 수: {len(df)}")
+print(f"삭제 후 행 수: {len(df_dropped)}")
+
+# 방법 2: 평균값으로 채우기
+print("\n=== 방법 2: 평균으로 채우기 ===")
+df_filled = df.copy()
+df_filled['점수'].fillna(df['점수'].mean(), inplace=True)
+print("평균으로 채워진 데이터:")
+print(df_filled)
+
+# 방법 3: 특정 값으로 채우기
+print("\n=== 방법 3: 0으로 채우기 ===")
+df_zero = df.fillna(0)
+print(df_zero)
+
+# 방법 4: 앞의 값으로 채우기 (forward fill)
+print("\n=== 방법 4: 앞 값으로 채우기 ===")
+df_ffill = df.fillna(method='ffill')
+print(df_ffill)</div>
+
+            <div class="thinking-box">
+                <h4>📝 빈 데이터 처리 방법 비교하기</h4>
+                <p><strong>어떤 방법을 언제 사용하면 좋을까요?</strong></p>
+                <textarea class="textarea" placeholder="각 방법의 장단점과 사용 시기를 정리해보세요"></textarea>
+            </div>
+
+            <h3>문제 3: 중복 데이터 제거하기</h3>
+            <div class="code-block">print("=== 중복 데이터 확인 ===")
+print(f"중복된 행이 있나요? {df.duplicated().any()}")
+print(f"중복된 행 개수: {df.duplicated().sum()}")
+
+# 중복 제거
+print("\n=== 중복 제거하기 ===")
+df_unique = df.drop_duplicates()
+print(f"원래 행 수: {len(df)}")
+print(f"중복 제거 후: {len(df_unique)}")</div>
+        </div>
+
+        <div class="practice-section">
+            <h2>🔧 실습 3: 데이터 타입 다루기</h2>
+            
+            <h3>데이터 타입이 왜 중요할까?</h3>
+            <div class="code-block"># 데이터 타입 확인
+print("=== 각 컬럼의 데이터 타입 ===")
+print(df.dtypes)
+
+# 문제 상황: 숫자인데 문자로 저장됨
+print("\n=== 타입이 잘못된 경우 ===")
+# '점수' 컬럼이 문자(object)로 저장됨
+print(df['점수'].dtype)
+
+# 타입 변경하기
+df['점수'] = pd.to_numeric(df['점수'], errors='coerce')
+print(f"변경 후 타입: {df['점수'].dtype}")</div>
+
+            <h3>날짜 데이터 다루기</h3>
+            <div class="code-block"># 날짜 컬럼을 날짜 타입으로 변경
+df['날짜'] = pd.to_datetime(df['날짜'])
+print("날짜 타입으로 변경 완료!")
+
+# 날짜에서 정보 추출하기
+df['년도'] = df['날짜'].dt.year
+df['월'] = df['날짜'].dt.month
+df['요일'] = df['날짜'].dt.day_name()
+
+print("=== 날짜 정보 추출 ===")
+print(df[['날짜', '년도', '월', '요일']])</div>
+
+            <div class="thinking-box">
+                <h4>📝 데이터 타입 이해하기</h4>
+                <p><strong>데이터 타입이 왜 중요한가요?</strong></p>
+                <textarea class="textarea" placeholder="데이터 타입의 중요성을 설명해보세요"></textarea>
+            </div>
+        </div>
+
+        <div class="practice-section">
+            <h2>📊 실습 4: 데이터 정리 종합 실습</h2>
+            
+            <h3>실전! 우리 반 성적 데이터 정리하기</h3>
+            <div class="code-block"># 1단계: 파일 읽기
+print("=== 1단계: 데이터 불러오기 ===")
+scores = pd.read_csv('class_scores.csv', encoding='utf-8')
+print(f"원본 데이터 크기: {scores.shape}")
+print(scores.head())
+
+# 2단계: 빈 데이터 확인
+print("\n=== 2단계: 빈 데이터 확인 ===")
+missing_info = scores.isnull().sum()
+print(missing_info)
+
+# 3단계: 빈 데이터 처리 전략 세우기
+print("\n=== 3단계: 데이터 정리 ===")
+# 이름이 없으면 삭제
+scores = scores.dropna(subset=['이름'])
+
+# 점수가 없으면 과목별 평균으로 채우기
+for subject in ['국어', '영어', '수학']:
+    mean_score = scores[subject].mean()
+    scores[subject].fillna(mean_score, inplace=True)
+    print(f"{subject} 평균: {mean_score:.1f}점으로 채움")
+
+# 4단계: 중복 제거
+print("\n=== 4단계: 중복 제거 ===")
+scores = scores.drop_duplicates(subset=['이름'])
+print(f"정리 후 데이터 크기: {scores.shape}")
+
+# 5단계: 통계 확인
+print("\n=== 5단계: 정리된 데이터 통계 ===")
+print(scores.describe())
+
+# 6단계: 정리된 데이터 저장
+print("\n=== 6단계: 정리된 데이터 저장 ===")
+scores.to_csv('cleaned_scores.csv', index=False, encoding='utf-8')
+print("✅ 저장 완료!")</div>
+
+            <div class="thinking-box">
+                <h4>📝 데이터 정리 프로세스 기록하기</h4>
+                <p><strong>원본 데이터 크기:</strong> <input type="text" class="input-box" style="width: 150px; display: inline-block;"></p>
+                <p><strong>정리 후 데이터 크기:</strong> <input type="text" class="input-box" style="width: 150px; display: inline-block;"></p>
+                <p><strong>사용한 정리 방법:</strong></p>
+                <textarea class="textarea" placeholder="어떤 방법들을 사용했는지 정리해보세요"></textarea>
+            </div>
+        </div>
+
+        <div class="practice-section">
+            <h2>🎯 실습 5: 컬럼 이름 정리하기</h2>
+            
+            <h3>컬럼 이름 바꾸기</h3>
+            <div class="code-block"># 방법 1: 전체 컬럼 이름 바꾸기
+df.columns = ['이름', '나이', '키', '몸무게']
+print("모든 컬럼명 변경!")
+
+# 방법 2: 특정 컬럼만 바꾸기
+df.rename(columns={
+    'old_name': '새이름',
+    'height': '키'
+}, inplace=True)
+
+# 방법 3: 공백 제거하기 (자주 필요해요!)
+df.columns = df.columns.str.strip()
+print("컬럼명 앞뒤 공백 제거!")
+
+# 모든 컬럼명을 소문자로
+df.columns = df.columns.str.lower()
+print("모두 소문자로 변경!")</div>
+        </div>
+
+        <div class="challenge-section">
+            <h2>🚀 도전 과제: 실제 데이터 정리해보기</h2>
+            
+            <h3>과제 1: 날씨 데이터 정리</h3>
+            <div class="code-block"># weather.csv 파일을 정리해보세요!
+# 1. 파일을 읽어오기
+# 2. 빈 데이터 확인하기
+# 3. 적절한 방법으로 빈 데이터 처리하기
+# 4. 중복 제거하기
+# 5. 정리된 파일 저장하기
+
+weather = pd.read_csv('weather.csv')
+
+# 여기에 코드를 작성하세요!
+
+
+# 최종 결과 출력
+print("=== 정리 완료된 날씨 데이터 ===")
+print(weather.head())
+print(f"정리 후 데이터 크기: {weather.shape}")</div>
+
+            <div class="thinking-box">
+                <h4>📝 과제 계획 세우기</h4>
+                <p><strong>예상되는 문제점:</strong></p>
+                <textarea class="textarea" placeholder="어떤 문제가 있을 것 같나요?"></textarea>
+                <p><strong>해결 방법:</strong></p>
+                <textarea class="textarea" placeholder="어떻게 해결할 건가요?"></textarea>
+            </div>
+
+            <h3>과제 2: 도서관 대출 기록 분석</h3>
+            <div class="code-block"># library.csv 파일을 읽고 다음을 수행하세요
+# 1. 대출일을 날짜 타입으로 변경
+# 2. 연체된 책 찾기 (대출일로부터 14일 초과)
+# 3. 가장 인기있는 책 TOP 5
+# 4. 월별 대출 통계
+
+library = pd.read_csv('library.csv')
+
+# 여기에 여러분의 분석 코드를 작성하세요!</div>
+        </div>
+
+        <div class="challenge-section">
+            <h2>🎨 창의적 활동: 나만의 데이터 수집하고 정리하기</h2>
+            
+            <h3>프로젝트: 우리 학교 급식 만족도 조사</h3>
+            <div class="code-block"># 1단계: 데이터 수집 (구글 폼, 설문조사 등)
+# 2단계: CSV로 다운로드
+# 3단계: pandas로 불러오기
+
+lunch_survey = pd.read_csv('lunch_survey.csv')
+
+# 4단계: 데이터 정리
+print("=== 원본 데이터 ===")
+print(lunch_survey.head())
+
+# 빈 응답 제거
+lunch_clean = lunch_survey.dropna()
+
+# 이상한 응답 제거 (만족도가 1-5 범위를 벗어남)
+lunch_clean = lunch_clean[
+    (lunch_clean['만족도'] >= 1) & 
+    (lunch_clean['만족도'] <= 5)
+]
+
+# 5단계: 분석하기
+print("\n=== 급식 만족도 분석 ===")
+print(f"평균 만족도: {lunch_clean['만족도'].mean():.2f}점")
+print(f"응답자 수: {len(lunch_clean)}명")
+
+# 요일별 만족도
+day_satisfaction = lunch_clean.groupby('요일')['만족도'].mean()
+print("\n요일별 평균 만족도:")
+print(day_satisfaction.sort_values(ascending=False))
+
+# 6단계: 저장
+lunch_clean.to_csv('lunch_analysis.csv', index=False)
+print("\n✅ 분석 완료 및 저장!")</div>
+
+            <div class="thinking-box">
+                <h4>📝 나만의 프로젝트 아이디어</h4>
+                <p><strong>수집하고 싶은 데이터 주제:</strong></p>
+                <textarea class="textarea" placeholder="어떤 주제로 데이터를 수집하고 싶나요?"></textarea>
+            </div>
+        </div>
+
+        <div class="tip-section">
+            <h2>💡 꿀팁 모음</h2>
+            
+            <h3>CSV 파일 읽기 옵션들</h3>
+            <div class="code-block"># 인코딩 문제 해결
+df = pd.read_csv('file.csv', encoding='utf-8')  # UTF-8
+df = pd.read_csv('file.csv', encoding='cp949')  # 한글 윈도우
+
+# 첫 행이 헤더가 아닐 때
+df = pd.read_csv('file.csv', header=None)
+
+# 특정 컬럼만 읽기
+df = pd.read_csv('file.csv', usecols=['이름', '점수'])
+
+# 결측값 표시를 다르게 하고 싶을 때
+df = pd.read_csv('file.csv', na_values=['없음', '-', 'N/A'])</div>
+
+            <h3>CSV 파일 저장하기</h3>
+            <div class="code-block"># 기본 저장
+df.to_csv('output.csv', index=False)  # index=False 권장!
+
+# 한글 깨짐 방지
+df.to_csv('output.csv', index=False, encoding='utf-8-sig')
+
+# 특정 컬럼만 저장
+df[['이름', '점수']].to_csv('selected.csv', index=False)</div>
+
+            <h3>자주 쓰는 정리 패턴</h3>
+            <div class="code-block"># 한번에 여러 처리하기
+df_clean = (df
+    .dropna()                    # 빈
